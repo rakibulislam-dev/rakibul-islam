@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rakibul Islam (Rirakeeb) — Coming Soon</title>
+<meta name="description" content="Rakibul Islam, known as Rirakeeb — Senior WordPress Developer & Team Leader. Portfolio launching soon.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230B0E14%22/><text x=%2250%22 y=%2266%22 font-size=%2258%22 text-anchor=%22middle%22 fill=%22%23C9A24B%22 font-family=%22Georgia,serif%22>R</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0B0E14;
+    --bg-soft:#0F131B;
+    --surface:#141924;
+    --border:rgba(237,239,243,0.09);
+    --border-strong:rgba(237,239,243,0.16);
+    --text:#EDEFF3;
+    --muted:#8D96A8;
+    --muted-dim:#5C6478;
+    --gold:#C9A24B;
+    --gold-soft:rgba(201,162,75,0.14);
+    --teal:#4FD1C5;
+    --font-display:'Fraunces', Georgia, serif;
+    --font-body:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono:'JetBrains Mono', 'Courier New', monospace;
+    --max-w: 760px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ color-scheme: dark; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.5;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- background: geometric star field ---------- */
+  .star-field{
+    position:fixed;
+    inset:-25vmax;
+    width:150vmax;
+    height:150vmax;
+    z-index:0;
+    pointer-events:none;
+    opacity:0.55;
+    animation: spin-slow 220s linear infinite;
+  }
+  .star-field svg{ width:100%; height:100%; }
+  .star-shape{
+    fill:none;
+    stroke:var(--gold);
+    stroke-width:0.6;
+    opacity:0.5;
+  }
+  .star-dot{ fill:var(--gold); opacity:0.35; }
+
+  @keyframes spin-slow{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+  }
+
+  .vignette{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 38%, rgba(11,14,20,0) 0%, var(--bg) 78%),
+      linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 45%, var(--bg) 100%);
+  }
+
+  /* ---------- layout shell ---------- */
+  .wrap{
+    position:relative;
+    z-index:2;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:2rem clamp(1.25rem, 5vw, 3.5rem) 0;
+  }
+
+  .brandmark{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    text-decoration:none;
+  }
+  .brandmark .glyph{
+    width:30px; height:30px;
+    border:1px solid var(--border-strong);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display);
+    font-style:italic;
+    font-size:1.05rem;
+    color:var(--gold);
+  }
+
+  .status-pill{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    color:var(--muted);
+    border:1px solid var(--border);
+    padding:0.4rem 0.75rem;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    white-space:nowrap;
+  }
+  .status-pill .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 3px rgba(79,209,197,0.15);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:0.35; }
+  }
+
+  main{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:3.5rem clamp(1.25rem, 5vw, 3.5rem);
+  }
+
+  .hero{
+    max-width:var(--max-w);
+    width:100%;
+    text-align:center;
+  }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:inline-flex;
+    align-items:baseline;
+    gap:0.15rem;
+    margin-bottom:1.6rem;
+  }
+  .eyebrow .cursor{
+    display:inline-block;
+    width:0.55em;
+    height:1em;
+    background:var(--gold);
+    margin-left:0.2rem;
+    animation: blink 1.05s steps(1) infinite;
+    transform:translateY(0.15em);
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:500;
+    font-size:clamp(2.6rem, 7.5vw, 4.6rem);
+    line-height:1.03;
+    letter-spacing:-0.01em;
+    color:var(--text);
+  }
+
+  .also-known{
+    font-family:var(--font-display);
+    font-style:italic;
+    font-weight:400;
+    font-size:clamp(1.05rem, 2.4vw, 1.3rem);
+    color:var(--gold);
+    margin-top:0.55rem;
+    letter-spacing:0.01em;
+  }
+  .also-known::before,
+  .also-known::after{
+    content:"—";
+    color:var(--muted-dim);
+    margin:0 0.5rem;
+    font-style:normal;
+    font-family:var(--font-body);
+  }
+
+  .lede{
+    max-width:520px;
+    margin:1.6rem auto 0;
+    color:var(--muted);
+    font-size:1rem;
+    line-height:1.65;
+  }
+  .lede strong{ color:var(--text); font-weight:600; }
+
+  /* ---------- terminal ticker ---------- */
+  .ticker{
+    margin:2.5rem auto 0;
+    max-width:460px;
+    border:1px solid var(--border);
+    background:var(--surface);
+    border-radius:10px;
+    padding:0.9rem 1.1rem;
+    text-align:left;
+  }
+  .ticker-head{
+    display:flex;
+    gap:6px;
+    margin-bottom:0.7rem;
+  }
+  .ticker-head span{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--border-strong);
+  }
+  .ticker-line{
+    font-family:var(--font-mono);
+    font-size:0.86rem;
+    color:var(--muted);
+    min-height:1.3em;
+    display:flex;
+    align-items:center;
+    transition:opacity 0.35s ease, transform 0.35s ease;
+  }
+  .ticker-line .arrow{ color:var(--teal); margin-right:0.6em; }
+  .ticker-line.fade{ opacity:0; transform:translateY(4px); }
+
+  /* ---------- notify form ---------- */
+  .notify{
+    margin:2.4rem auto 0;
+    max-width:440px;
+  }
+  .notify-label{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--muted-dim);
+    margin-bottom:0.7rem;
+  }
+  form{
+    display:flex;
+    gap:0.6rem;
+  }
+  input[type="email"]{
+    flex:1;
+    background:var(--surface);
+    border:1px solid var(--border-strong);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-size:0.92rem;
+    padding:0.78rem 1rem;
+    border-radius:8px;
+    outline:none;
+    transition:border-color 0.2s ease, background 0.2s ease;
+  }
+  input[type="email"]::placeholder{ color:var(--muted-dim); }
+  input[type="email"]:focus{
+    border-color:var(--gold);
+    background:#171D29;
+  }
+  button[type="submit"]{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    color:var(--bg);
+    background:var(--gold);
+    border:none;
+    padding:0 1.35rem;
+    border-radius:8px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:background 0.2s ease, transform 0.15s ease;
+  }
+  button[type="submit"]:hover{ background:#DDB863; }
+  button[type="submit"]:active{ transform:scale(0.97); }
+  button[type="submit"]:focus-visible,
+  input[type="email"]:focus-visible,
+  .badge:focus-visible,
+  .brandmark:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:2px;
+  }
+
+  .form-note{
+    font-size:0.78rem;
+    color:var(--muted-dim);
+    margin-top:0.65rem;
+    min-height:1.1em;
+    transition:opacity 0.3s ease;
+  }
+  .form-note.success{ color:var(--teal); }
+
+  /* ---------- skill chips ---------- */
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:0.55rem;
+    margin:2.6rem auto 0;
+    max-width:520px;
+  }
+  .chip{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.02em;
+    color:var(--muted);
+    border:1px solid var(--border);
+    padding:0.4rem 0.8rem;
+    border-radius:999px;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:2rem clamp(1.25rem, 5vw, 3.5rem) 2.4rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.3rem;
+  }
+
+  .foot-meta{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:0.4rem 1rem;
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    color:var(--muted-dim);
+  }
+  .foot-meta a{ color:var(--muted); text-decoration:none; border-bottom:1px solid transparent; }
+  .foot-meta a:hover{ color:var(--gold); border-color:var(--gold); }
+
+  .badges{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:0.6rem;
+  }
+  .badge{
+    width:38px; height:38px;
+    border:1px solid var(--border-strong);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    letter-spacing:0.02em;
+    color:var(--muted);
+    text-decoration:none;
+    transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  }
+  .badge:hover{
+    border-color:var(--gold);
+    color:var(--bg);
+    background:var(--gold);
+    transform:translateY(-2px);
+  }
+
+  .copyline{
+    font-size:0.74rem;
+    color:var(--muted-dim);
+    text-align:center;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 520px){
+    form{ flex-direction:column; }
+    button[type="submit"]{ padding:0.78rem; }
+    .also-known::before,.also-known::after{ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .star-field{ animation:none; }
+    .status-pill .dot{ animation:none; }
+    .eyebrow .cursor{ animation:none; }
+    .ticker-line{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="star-field" id="starField">
+  <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="starPattern" width="140" height="140" patternUnits="userSpaceOnUse">
+        <polygon class="star-shape" id="starPoly" points=""></polygon>
+        <circle class="star-dot" cx="70" cy="70" r="1.6"></circle>
+      </pattern>
+    </defs>
+    <rect width="1000" height="1000" fill="url(#starPattern)"></rect>
+  </svg>
+</div>
+<div class="vignette"></div>
+
+<div class="wrap">
+  <header>
+    <a href="#" class="brandmark" aria-label="Rirakeeb home">
+      <span class="glyph">R</span>
+      <span>rirakeeb</span>
+    </a>
+    <div class="status-pill">
+      <span class="dot"></span>
+      <span>site status: building</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">portfolio.status = "in progress"<span class="cursor" aria-hidden="true"></span></p>
+
+      <h1>Rakibul Islam</h1>
+      <p class="also-known">known as Rirakeeb</p>
+
+      <p class="lede">
+        <strong>Senior WordPress Developer &amp; Team Leader</strong> at Softvence Agency, Dhaka —
+        4+ years building fast, secure, custom WordPress experiences.
+        My portfolio is being rebuilt from the ground up. Almost ready.
+      </p>
+
+      <div class="ticker" aria-live="polite">
+        <div class="ticker-head"><span></span><span></span><span></span></div>
+        <div class="ticker-line" id="tickerLine">
+          <span class="arrow">›</span><span id="tickerText">155+ WordPress websites shipped</span>
+        </div>
+      </div>
+
+      <div class="notify">
+        <p class="notify-label">get notified when it's live</p>
+        <form id="notifyForm" action="https://formsubmit.co/rirakeebplus@gmail.com" method="POST">
+          <label for="emailInput" class="sr-only" style="position:absolute;left:-9999px;">Email address</label>
+          <input type="hidden" name="_subject" value="New notify-me signup — portfolio">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://rakibul-islam.pro.bd/?submitted=true">
+          <input type="email" id="emailInput" name="email" placeholder="you@example.com" required autocomplete="email">
+          <button type="submit">Notify Me</button>
+        </form>
+        <p class="form-note" id="formNote">No spam — just one message when the site goes live.</p>
+      </div>
+
+      <div class="chips">
+        <span class="chip">WordPress</span>
+        <span class="chip">WooCommerce</span>
+        <span class="chip">PHP</span>
+        <span class="chip">REST API</span>
+        <span class="chip">Automation</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-meta">
+      <span>Dhaka, Bangladesh</span>
+      <a href="mailto:rirakeebplus@gmail.com">rirakeebplus@gmail.com</a>
+      <a href="https://wa.me/8801920759102" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+
+    <nav class="badges" aria-label="Social links">
+      <a class="badge" href="mailto:rirakeebplus@gmail.com" title="Email" aria-label="Email">em</a>
+      <a class="badge" href="https://wa.me/8801920759102" target="_blank" rel="noopener" title="WhatsApp" aria-label="WhatsApp">wa</a>
+      <a class="badge" href="https://linkedin.com/in/rirakeeb" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">in</a>
+      <a class="badge" href="https://facebook.com/rirakeeb" target="_blank" rel="noopener" title="Facebook" aria-label="Facebook">fb</a>
+      <a class="badge" href="https://instagram.com/rirakeeb" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">ig</a>
+      <a class="badge" href="https://twitter.com/rirakeeb_" target="_blank" rel="noopener" title="Twitter / X" aria-label="Twitter / X">x</a>
+      <a class="badge" href="https://pinterest.com/rirakeeb" target="_blank" rel="noopener" title="Pinterest" aria-label="Pinterest">pt</a>
+      <a class="badge" href="https://medium.com/@rirakeeb" target="_blank" rel="noopener" title="Medium" aria-label="Medium">md</a>
+      <a class="badge" href="https://about.me/rirakeeb" target="_blank" rel="noopener" title="About.me" aria-label="About.me">am</a>
+    </nav>
+
+    <p class="copyline">© <span id="year"></span> Rakibul Islam — Rirakeeb. All rights reserved.</p>
+  </footer>
+</div>
+
+<script>
+  // ---- build the 8-point star pattern precisely ----
+  (function buildStar(){
+    const cx = 70, cy = 70, rOuter = 46, rInner = 19, points = 16;
+    let pts = [];
+    for(let i = 0; i < points; i++){
+      const angle = (Math.PI / (points/2)) * i - Math.PI/2;
+      const r = i % 2 === 0 ? rOuter : rInner;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      pts.push(x.toFixed(2) + "," + y.toFixed(2));
+    }
+    const poly = document.getElementById("starPoly");
+    if(poly) poly.setAttribute("points", pts.join(" "));
+  })();
+
+  // ---- footer year ----
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // ---- terminal ticker rotation ----
+  const tickerItems = [
+    "155+ WordPress websites shipped",
+    "Leading an 8-member dev team",
+    "WooCommerce · REST API · Custom Plugins",
+    "AI &amp; workflow automation integrations",
+    "Based in Dhaka, Bangladesh"
+  ].map(s => s.replace("&amp;", "&"));
+
+  const tickerText = document.getElementById("tickerText");
+  const tickerLine = document.getElementById("tickerLine");
+  let tickerIndex = 0;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function rotateTicker(){
+    tickerLine.classList.add("fade");
+    setTimeout(() => {
+      tickerIndex = (tickerIndex + 1) % tickerItems.length;
+      tickerText.textContent = tickerItems[tickerIndex];
+      tickerLine.classList.remove("fade");
+    }, reduceMotion ? 0 : 350);
+  }
+  if(!reduceMotion){
+    setInterval(rotateTicker, 3000);
+  }
+
+  // ---- notify form is now handled natively by FormSubmit.co (see form action) ----
+</script>
+
+</body>
+</html>
