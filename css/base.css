@@ -1,0 +1,359 @@
+/* ============================================================
+   base.css — design tokens, reset, typography, utilities
+   Concept: "Field Atlas" — warm survey paper, ink rules,
+   one vermilion pin accent. Everything else stays quiet.
+   ============================================================ */
+
+:root {
+  /* --- Paper & ink ------------------------------------------- */
+  --paper:      #F3EEE3;   /* warm chart paper                  */
+  --paper-2:    #EAE3D2;   /* deeper paper (tinted sections)    */
+  --ink:        #1B1812;   /* near-black warm ink               */
+  --ink-2:      #5A5140;   /* soft ink for meta text            */
+  --line:       rgba(27, 24, 18, .16);
+  --line-strong:rgba(27, 24, 18, .6);
+
+  /* --- The one accent (vermilion map pin) -------------------- */
+  --accent:       #E8501A;
+  --accent-ink:   #B33A0C;  /* accessible-on-paper variant       */
+  --accent-soft:  rgba(232, 80, 26, .12);
+
+  /* --- Status beacon green (semantic only) ------------------- */
+  --ok:         #2F9E44;
+
+  /* --- Dark tiles (portrait inset, contact band, footer) ----- */
+  --tile:        #14110C;
+  --tile-2:      #0D0B08;
+  --tile-text:   #EFE9DB;
+  --tile-line:   rgba(239, 233, 219, .16);
+  --tile-ink-2:  #A79C87;
+
+  /* --- Grid paper lines -------------------------------------- */
+  --grid-s: rgba(27, 24, 18, .055);
+  --grid-l: rgba(27, 24, 18, .09);
+
+  /* --- Theme-aware surfaces ----------------------------------- */
+  --head-bg:    rgba(243, 238, 227, .92);          /* scrolled header glass */
+  --card-shadow: rgba(27, 24, 18, .07);            /* hard offset shadows   */
+  --glow-a: transparent;                            /* night aurora layers  */
+  --glow-b: transparent;
+
+  /* --- Type --------------------------------------------------- */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:    "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+
+  --fs-hero:  clamp(3.4rem, 10.5vw, 8.2rem);
+  --fs-title: clamp(2.3rem, 5.4vw, 4rem);
+  --fs-role:  clamp(1.02rem, 1.55vw, 1.22rem);
+
+  /* --- Motion -------------------------------------------------- */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-io:  cubic-bezier(.65, 0, .35, 1);
+}
+
+/* ------------------------------------------------------------
+   DARK MODE — automatic via OS preference
+   Note: --tile* variables are NOT overridden here because they
+   are used by .section--ink and .site-foot which must stay dark
+   in both modes.
+   ------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:      #15110D;
+    --paper-2:    #1D1914;
+    --ink:        #F0E9DA;
+    --ink-2:      #B3A78F;
+    --line:       rgba(240, 233, 218, .14);
+    --line-strong:rgba(240, 233, 218, .5);
+
+    --accent:       #FF6B35;
+    --accent-ink:   #FF8C5A;
+    --accent-soft:  rgba(255, 107, 53, .16);
+
+    --ok:         #4ADE80;
+
+    --grid-s: rgba(240, 233, 218, .045);
+    --grid-l: rgba(240, 233, 218, .08);
+
+    --head-bg:    rgba(21, 17, 13, .86);
+    --card-shadow: rgba(0, 0, 0, .5);
+    --glow-a: rgba(255, 107, 53, .075);
+    --glow-b: rgba(74, 222, 128, .05);
+  }
+}
+
+/* Manual dark mode toggle: html.dark forces dark tokens */
+html.dark {
+  --paper:      #15110D;
+  --paper-2:    #1D1914;
+  --ink:        #F0E9DA;
+  --ink-2:      #B3A78F;
+  --line:       rgba(240, 233, 218, .14);
+  --line-strong:rgba(240, 233, 218, .5);
+
+  --accent:       #FF6B35;
+  --accent-ink:   #FF8C5A;
+  --accent-soft:  rgba(255, 107, 53, .16);
+
+  --ok:         #4ADE80;
+
+  --grid-s: rgba(240, 233, 218, .045);
+  --grid-l: rgba(240, 233, 218, .08);
+
+  --head-bg:    rgba(21, 17, 13, .86);
+  --card-shadow: rgba(0, 0, 0, .5);
+  --glow-a: rgba(255, 107, 53, .075);
+  --glow-b: rgba(74, 222, 128, .05);
+}
+
+/* Override: html.light forces light tokens regardless of OS */
+html.light {
+  --paper:      #F3EEE3;
+  --paper-2:    #EAE3D2;
+  --ink:        #1B1812;
+  --ink-2:      #5A5140;
+  --line:       rgba(27, 24, 18, .16);
+  --line-strong:rgba(27, 24, 18, .6);
+
+  --accent:       #E8501A;
+  --accent-ink:   #B33A0C;
+  --accent-soft:  rgba(232, 80, 26, .12);
+
+  --ok:         #2F9E44;
+
+  --tile:        #14110C;
+  --tile-2:      #0D0B08;
+  --tile-text:   #EFE9DB;
+  --tile-line:   rgba(239, 233, 219, .16);
+  --tile-ink-2:  #A79C87;
+
+  --grid-s: rgba(27, 24, 18, .055);
+  --grid-l: rgba(27, 24, 18, .09);
+
+  --head-bg:    rgba(243, 238, 227, .92);
+  --card-shadow: rgba(27, 24, 18, .07);
+  --glow-a: transparent;
+  --glow-b: transparent;
+}
+
+/* ------------------------------------------------------------
+   Reset (lean, modern)
+   ------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background-color: var(--paper);
+
+  /* Chart-paper grid: fine squares + major squares.
+     --glow-a/b paint a faint "aurora over the survey site" in dark
+     mode and resolve to transparent in light mode. */
+  background-image:
+    radial-gradient(110% 55% at 82% -8%, var(--glow-a), transparent 58%),
+    radial-gradient(90% 60% at -12% 42%, var(--glow-b), transparent 60%),
+    linear-gradient(var(--grid-s) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-s) 1px, transparent 1px),
+    linear-gradient(var(--grid-l) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-l) 1px, transparent 1px);
+  background-size:
+    auto auto,
+    auto auto,
+    24px 24px,
+    24px 24px,
+    120px 120px,
+    120px 120px;
+
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, textarea { font: inherit; color: inherit; }
+
+ul[class], ol[class] { list-style: none; padding: 0; }
+
+a { color: inherit; }
+
+h1, h2, h3, h4 {
+  line-height: 1.08;
+  font-weight: 550;
+  text-wrap: balance;
+}
+
+/* Hide the SVG symbol library */
+.svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ------------------------------------------------------------
+   Selection / focus / caret
+   ------------------------------------------------------------ */
+::selection { background: var(--accent); color: var(--paper); }
+
+:focus-visible {
+  outline: 2px dashed var(--accent-ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Slim ink scrollbar — part of the print aesthetic */
+@supports (scrollbar-width: thin) {
+  html { scrollbar-width: thin; scrollbar-color: var(--ink) var(--paper); }
+}
+
+/* ------------------------------------------------------------
+   Typography helpers
+   ------------------------------------------------------------ */
+.mono {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.u-accent { color: var(--accent); }
+.u-accent-strong { color: var(--accent-ink); font-weight: 600; }
+
+/* ------------------------------------------------------------
+   Skip link
+   ------------------------------------------------------------ */
+.skip-link {
+  position: fixed;
+  top: 10px; left: 10px;
+  z-index: 200;
+  padding: .6em 1em;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  text-decoration: none;
+  transform: translateY(-300%);
+  transition: transform .25s var(--ease-out);
+}
+.skip-link:focus-visible { transform: none; }
+
+/* ------------------------------------------------------------
+   Print: collapse to a clean, self-contained document
+   ------------------------------------------------------------ */
+@media print {
+  /* --- Strip non-content layers ---------------------------- */
+  body {
+    background-image: none !important;
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+  }
+  .frame, .cursor, .boot, .wipe, .toast,
+  .hero__cue, .marquee, .nav-toggle, .totop,
+  .secret-pin, .site-head__side,
+  .preview, .route__rail, .route__fill, .route__runner,
+  .route__svg, .route__scenery, .route__marker,
+  .portrait__rings, .portrait__bracket,
+  .pin__hint, .pcard__hint, .pin__toggle,
+  .filters, .pins__more { display: none !important; }
+
+  /* --- Force everything visible ---------------------------- */
+  [data-reveal], [data-split] .chr {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .pin.is-open .pin__body, .pcard.is-open .pcard__body {
+    grid-template-rows: 1fr !important;
+  }
+  .pin:not(.is-open) .pin__inner,
+  .pcard:not(.is-open) .pcard__inner {
+    visibility: visible !important;
+  }
+
+  /* --- Strip backgrounds, shadows, borders ------------------ */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-text-stroke: 0 !important;
+  }
+  .section--tint, .section--ink, .site-foot {
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+  }
+  .site-foot { border-top: 2px solid #000; }
+  .site-foot__big { color: #000 !important; -webkit-text-stroke: 0 !important; }
+
+  /* --- Links ------------------------------------------------ */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.7em;
+    color: #555;
+    word-break: break-all;
+  }
+  a[href^="#"]::after, a[href^="mailto"]::after,
+  .site-head a::after, .nav-toggle::after {
+    content: none;
+  }
+
+  /* --- Layout adjustments ----------------------------------- */
+  .hero {
+    min-height: auto !important;
+    padding: 40px 0 !important;
+  }
+  .hero__grid { grid-template-columns: 1fr !important; }
+  .portrait { width: min(280px, 60%); rotate: 0deg; }
+  .hero__stats { grid-template-columns: repeat(4, auto); gap: 16px; }
+
+  .logbook { grid-template-columns: 1fr !important; }
+  .logbook__facts { position: static !important; }
+  .contact__grid { grid-template-columns: 1fr !important; }
+  .site-foot__cols { grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .pin__head { padding: 12px 6px !important; }
+  .pin__inner { padding: 0 6px !important; max-width: none !important; }
+  .pin__cols { grid-template-columns: 1fr 1fr !important; }
+  .pin::after { display: none !important; }
+  .pin__body { grid-template-rows: 1fr !important; }
+  .pin:not(.is-open) .pin__inner { visibility: visible !important; }
+
+  .cards { grid-template-columns: 1fr 1fr !important; }
+  .pcard__body { grid-template-rows: 1fr !important; }
+  .pcard:not(.is-open) .pcard__inner { visibility: visible !important; }
+
+  /* --- Page breaks ------------------------------------------ */
+  .hero, .section { page-break-inside: avoid; }
+  .pin, .pcard, .waypoint, .module, .channel { page-break-inside: avoid; }
+  .legend { page-break-after: avoid; }
+
+  /* --- Margins & footer ------------------------------------- */
+  @page { margin: 2cm; }
+  @page :first { margin-top: 1cm; }
+
+  /* --- Footer stamp ----------------------------------------- */
+  body::after {
+    display: block;
+    content: "Printed from Field Atlas — rakibulislam.dev";
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid #ccc;
+    font-family: var(--font-mono);
+    font-size: 8pt;
+    color: #999;
+    text-align: center;
+  }
+}

@@ -1,0 +1,407 @@
+/* ============================================================
+   mobile.css — "Pocket Field Atlas"
+   ------------------------------------------------------------
+   Loaded last. Below 900px the desktop terrain hands over to a
+   purpose-designed pocket edition:
+
+   · Mini instrument HUD (top ruler + scroll pill, safe-area aware)
+   · Stamp-plate section headers with accent ticks
+   · The Route becomes a hiking trail: dashed spine, distance
+     chips between waypoints, date tags as bordered stamps,
+     gently alternating cards
+   · Touch devices get inline LIVE CAPTURES when a pin expands
+     (hover popups don't exist on touch) — see js/preview.js
+   · Tighter shadows, bigger tap targets, zero horizontal scroll
+
+   Desktop (≥901px) is untouched by this file.
+   ============================================================ */
+
+/* ============================================================
+   ≤ 900px — shared tablet/large-phone adjustments
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* --- Mini instrument HUD instead of hiding it entirely ---- */
+  .frame__ruler--top { height: 5px; opacity: .25; }
+  .frame__cell { font-size: .55rem; letter-spacing: .12em; }
+  .frame__cell--tl,
+  .frame__cell--tr { display: none; }
+  .frame__cell--bl { bottom: calc(10px + env(safe-area-inset-bottom)); left: 12px; }
+  .frame__cell--br {
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    right: 12px;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Sections breathe less vertically --------------------- */
+  .section { padding-block: 68px; }
+  .hero { padding-top: 104px; padding-bottom: 110px; }
+
+  /* --- Marquee slightly tighter ------------------------------ */
+  .marquee__group { gap: 24px; padding: 11px 13px; font-size: .64rem; }
+  .marquee__group span { gap: 24px; }
+  .marquee__group span::after { margin-left: 24px; width: 8px; height: 8px; }
+
+  /* --- THE ROUTE — keep a hint of the terrain below 901px ---- */
+  /* Desktop hides the scenery entirely on small screens; we bring
+     it back faintly so the pocket edition still reads as a map. */
+  .route__scenery {
+    display: block;
+    position: absolute;
+    inset: -24px 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .route__contour {
+    position: absolute;
+    border: 1.5px dashed var(--line-strong);
+    border-radius: 50%;
+    opacity: .13;
+  }
+  .route__contour--a { width: 230px; height: 135px; top: 3%;  right: -70px; rotate: -10deg; }
+  .route__contour--b { width: 190px; height: 115px; top: 37%; left: -80px;  rotate: 8deg;  }
+  .route__contour--c { width: 250px; height: 145px; bottom: 2%; right: -50px; rotate: -6deg; }
+  .route__contour::after {
+    content: "";
+    position: absolute;
+    inset: 14px 24px;
+    border: 1px dashed var(--line);
+    border-radius: 50%;
+  }
+  .route__list { position: relative; z-index: 1; }
+  .route__rail { z-index: 1; }
+}
+
+/* ============================================================
+   ≤ 720px — the Pocket Atlas character pass
+   ============================================================ */
+@media (max-width: 720px) {
+
+  body { overflow-x: clip; }
+
+  /* ----------------------------------------------------------
+     HERO — satellite tile up top, stamp-grid stats, full-width
+     stamp buttons
+     ---------------------------------------------------------- */
+  .hero__grid { gap: 38px; }
+
+  .portrait {
+    width: min(290px, 76%);
+    margin-bottom: 4px;
+  }
+  .portrait__caption {
+    justify-content: center;
+    gap: 4px 12px;
+  }
+
+  .hero__eyebrow { margin-bottom: 16px; font-size: .62rem; }
+
+  .hero__name { margin-bottom: 18px; }
+  .hero__name-line--ghost { -webkit-text-stroke-width: 1.2px; }
+
+  .hero__role { margin-bottom: 26px; font-size: .98rem; }
+
+  .hero__stats {
+    grid-template-columns: repeat(2, auto);
+    justify-content: space-between;
+    gap: 14px 18px;
+    padding: 16px 0;
+    margin-bottom: 28px;
+  }
+  .stat__num { font-size: 1.7rem; }
+  .stat__label { font-size: .56rem; }
+
+  .hero__cta { flex-direction: column; }
+  .hero__cta .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 17px 22px;
+  }
+  .btn { box-shadow: none; }
+  .btn:hover { translate: none; }
+
+  .hero__cue { display: none; }
+
+  /* ----------------------------------------------------------
+     LEGEND HEADERS — stamp plates
+     ---------------------------------------------------------- */
+  .legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 18px;
+    margin-bottom: 34px;
+  }
+  .legend__no {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    order: -1;
+    margin-bottom: 0;
+  }
+  .legend__no::before {
+    content: "";
+    width: 26px;
+    height: 2px;
+    background: var(--accent);
+  }
+  .legend__title { font-size: clamp(1.9rem, 8.6vw, 2.5rem); }
+  .legend__meta { text-align: left; line-height: 1.7; font-size: .6rem; }
+  .legend__meta br { display: none; }
+
+  /* ----------------------------------------------------------
+     THE ROUTE — trail map edition
+     Dashed spine on the left, alternating cards, distance chips
+     dropped onto the spine between waypoints, dates as stamps.
+     The rail (left 12px, 2px wide) is aligned to the exact center
+     of the 26px node column; trailhead / end plates cap the line.
+     ---------------------------------------------------------- */
+  .route__list { gap: 56px; }
+
+  /* Trail plates capping the spine.
+     Anchored just RIGHT of the rail (not centered on it) — the
+     spine hugs the screen edge on phones, so centered labels
+     would be clipped off-screen. */
+  .route__list::before,
+  .route__list::after {
+    position: absolute;
+    left: 24px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: .52rem;
+    letter-spacing: .14em;
+    white-space: nowrap;
+    color: var(--accent-ink);
+    background: var(--paper);
+    border: 1.5px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+  .route__list::before { content: "▲ TRAILHEAD"; top: -32px; }
+  .route__list::after  { content:"⚑ ROUTE'S END"; bottom: -34px; }
+
+  /* Spine sits under the node column, exactly on its centerline */
+  .route__rail { left: 12px; width: 2px; }
+  .route__track {
+    border-left: 2px dashed var(--line-strong);
+    opacity: .6;
+  }
+
+  .waypoint { grid-template-columns: 26px minmax(0, 1fr); position: relative; }
+
+  /* Bigger, brighter waypoint dots with a paper halo */
+  .waypoint__dot {
+    width: 15px; height: 15px;
+    border-width: 2.5px;
+    box-shadow: 0 0 0 4px var(--paper);
+  }
+
+  .waypoint__card {
+    margin-left: 26px;
+    padding: 18px 16px 17px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 5px 5px 0 var(--card-shadow);
+    transition: border-color .35s var(--ease-out), box-shadow .35s var(--ease-out);
+  }
+  /* Accent progress strip that ignites when the trail reaches you */
+  .waypoint__card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent 72%);
+    opacity: 0;
+    transition: opacity .4s var(--ease-out);
+  }
+  .waypoint.is-active .waypoint__card {
+    border-color: var(--accent-ink);
+    box-shadow: 5px 5px 0 var(--accent-soft);
+  }
+  .waypoint.is-active .waypoint__card::before { opacity: 1; }
+
+  .waypoint:nth-child(even) .waypoint__card {
+    translate: 8px 0; /* gentle stagger — trail zigzag feel */
+  }
+
+  .waypoint__era {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 11px;
+  }
+  .waypoint__kicker { font-size: .58rem; }
+  /* Dates become bordered altitude stamps */
+  .waypoint__dates {
+    display: inline-block;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 2px 9px;
+    font-size: .54rem;
+    color: var(--ink);
+    background: var(--paper-2);
+  }
+
+  .waypoint__role { font-size: 1.16rem; }
+  .waypoint__org { font-size: .6rem; margin-bottom: 11px; }
+  .waypoint__points { gap: 6px; font-size: .88rem; }
+  .waypoint__points li { padding-left: 16px; }
+
+  /* Distance chip hanging below each waypoint, just right of the
+     spine (left-aligned like the trail plates — never centered,
+     never clipped). Paper fill keeps it legible on the tinted
+     section background. */
+  .waypoint:not(:last-child)::after {
+    content: "▼ " attr(data-next);
+    position: absolute;
+    left: 24px;
+    bottom: -35px;
+    z-index: 1;
+    font-family: var(--font-mono);
+    font-size: .52rem;
+    letter-spacing: .12em;
+    white-space: nowrap;
+    color: var(--accent-ink);
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 3px 8px;
+  }
+
+  /* ----------------------------------------------------------
+     DEPLOYED PINS — rows tuned for thumbs + inline captures
+     ---------------------------------------------------------- */
+  .filters { gap: 7px; margin-bottom: 26px; }
+  .chip { padding: 8px 12px; font-size: .6rem; }
+  .filters__count { font-size: .6rem; }
+
+  .pin__head {
+    grid-template-columns: 30px minmax(0, 1fr) 36px;
+    gap: 12px;
+    padding: 18px 44px 18px 2px;
+  }
+  .pin__index, .pin__coord { display: none; }
+  .pin::after { display: none; }
+
+  .pin__marker { width: 17px; height: 17px; }
+  .pin__title { font-size: 1.1rem; }
+  .pin__meta { font-size: .58rem; }
+
+  .pin__hint { top: -10px; right: 10px; font-size: .5rem; padding: 3px 8px; }
+
+  .pin__inner { padding-left: 32px; padding-right: 14px; }
+  .pin__summary { font-size: .88rem; padding-block: 2px 16px; }
+
+  .pin__cols { grid-template-columns: 1fr; gap: 18px; padding-block: 4px 16px; }
+  .pin__scope { font-size: .86rem; }
+  .pin__outcome { font-size: .64rem; line-height: 1.75; padding: 11px 13px; }
+
+  /* Inline live capture injected on expand (touch devices) */
+  .pin__capture,
+  .pcard__capture {
+    margin: 0 0 16px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 6px 6px 0 var(--accent-soft);
+  }
+  .pin__capture img,
+  .pcard__capture img {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 120px;
+    background: var(--paper-2);
+  }
+  .pin__capture-note,
+  .pcard__capture-note {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 7px 10px;
+    border-top: 1.5px solid var(--line-strong);
+    font-size: .52rem;
+    letter-spacing: .12em;
+    color: var(--ink-2);
+  }
+  .pin__capture[hidden], .pcard__capture[hidden] { display: none; }
+
+  .pins__more { margin-top: 34px; padding-top: 24px; gap: 14px; }
+  .pins__more p { font-size: .56rem; line-height: 1.8; }
+  .pins__more .btn { width: 100%; justify-content: center; }
+
+  /* ----------------------------------------------------------
+     LOADOUT / MODULES
+     ---------------------------------------------------------- */
+  .loadout__intro { font-size: .92rem; margin: -8px 0 30px; }
+  .modules { gap: 16px; }
+  .module { padding: 19px 16px 17px; }
+  .module__head { gap: 9px; flex-wrap: wrap; }
+  .module__name { font-size: 1.08rem; }
+  .module__code { font-size: .54rem; }
+  .module__blurb { font-size: .84rem; margin-bottom: 13px; }
+  .chipset li { font-size: .58rem; padding: 4px 9px; }
+
+  /* Cards variant (archive page) */
+  .pcard { padding: 20px 16px 16px; gap: 11px; }
+  .pcard::before, .pcard::after { content: none; }
+  .pcard__title { font-size: 1.16rem; }
+  .pcard__summary { font-size: .87rem; }
+  .pcard__actions { gap: 9px; padding-top: 13px; }
+  .pcard__more { margin-left: 0; }
+  .pcard__nda { font-size: .54rem; padding: 9px 11px; }
+
+  /* ----------------------------------------------------------
+     CONTACT + FOOTER
+     ---------------------------------------------------------- */
+  .contact__lede { font-size: .98rem; margin: -6px 0 32px; }
+  .contact__grid { gap: 30px; }
+  .channel { padding: 15px 14px; gap: 14px; }
+  .channel__value { font-size: .95rem; word-break: break-all; }
+  .compose { padding: 20px 17px; }
+  .compose__field { margin-bottom: 16px; }
+  .compose__note { font-size: .58rem; }
+
+  .site-foot { padding-top: 54px; }
+  .site-foot__top { padding-bottom: 30px; }
+  .site-foot__big {
+    font-size: clamp(1.8rem, 9.4vw, 2.6rem);
+    -webkit-text-stroke-width: 1px;
+  }
+  .totop { width: 52px; height: 52px; }
+  .totop svg { width: 19px; height: 19px; }
+  .site-foot__cols { grid-template-columns: 1fr; gap: 20px; padding-block: 28px; }
+  .site-foot__base { flex-direction: column; align-items: flex-start; gap: 8px; font-size: .6rem; }
+
+  /* Toast respects the home-indicator bar */
+  .toast {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    max-width: 92vw;
+    font-size: .64rem;
+  }
+}
+
+/* ============================================================
+   ≤ 420px — narrow phones
+   ============================================================ */
+@media (max-width: 420px) {
+  .wrap { width: min(1180px, 94vw); }
+
+  .brand__text { font-size: .74rem; }
+  .theme-toggle { padding: 9px 10px; }
+
+  .hero__stats { gap: 12px 14px; }
+  .stat__num { font-size: 1.45rem; }
+
+  .facts__row { grid-template-columns: 1fr; gap: 3px; padding-block: 12px; }
+  .facts dd { font-size: .88rem; }
+
+  .logbook__facts { padding: 20px 16px 8px; }
+
+  /* Too tight for the zigzag stagger — straighten the trail */
+  .waypoint:nth-child(even) .waypoint__card { translate: 0 0; }
+}

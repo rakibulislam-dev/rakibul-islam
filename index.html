@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       FIELD ATLAS — portfolio of Rakibul Islam
+       Concept: the site is a living surveyor's chart. Sections are
+       named like map regions, scroll follows a route line, and the
+       cursor is a pin. Static HTML/CSS/JS — no build step.
+       ============================================================ -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rakibul Islam — Senior WordPress Developer &amp; Team Lead, Dhaka</title>
+  <meta name="description" content="Field Atlas of Rakibul Islam: senior WordPress developer & team lead in Dhaka. multiple sites, WooCommerce / marketplace / LMS specialist, author of Mappin Location Locator on WordPress.org.">
+  <meta name="theme-color" content="#F3EEE3">
+  <!-- Open Graph (basics) -->
+  <meta property="og:title" content="Rakibul Islam — Field Atlas of a WordPress Operator">
+  <meta property="og:description" content="multiple sites. An 8-person team led. One plugin on WordPress.org. Chart the whole route.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon: inline SVG map pin (no extra request) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2a9.5 9.5 0 0 0-9.5 9.5C6.5 18.6 16 30 16 30s9.5-11.4 9.5-18.5A9.5 9.5 0 0 0 16 2z' fill='%23E8501A'/%3E%3Ccircle cx='16' cy='11.5' r='3.7' fill='%23F3EEE3'/%3E%3C/svg%3E">
+
+  <!-- Typography: Fraunces (display serif) + IBM Plex Sans/Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,550;0,9..144,650;1,9..144,450;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles: base tokens → layout → components → motion -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/motion.css">
+  <link rel="stylesheet" href="css/mobile.css">
+
+  <!-- No-JS fallback: skip the boot overlay, show all intro states -->
+  <noscript>
+    <style>
+      body[data-loading] :is(.hero__eyebrow,.hero__role,.hero__stats,.hero__cta,.portrait,.hero__cue) { opacity: 1 !important; }
+      .boot, .wipe, .cursor, .theme-toggle { display: none !important; }
+      .portrait__frame { clip-path: none !important; }
+    </style>
+  </noscript>
+</head>
+
+<body data-loading>
+
+  <a class="skip-link" href="#origin">Skip to content</a>
+
+  <!-- ============================================================
+       SVG SYMBOL LIBRARY (referenced via <use>)
+       ============================================================ -->
+  <svg class="svg-defs" aria-hidden="true" focusable="false">
+    <symbol id="i-pin" viewBox="0 0 24 24">
+      <path d="M12 2a7.2 7.2 0 0 0-7.2 7.2C4.8 14.6 12 22 12 22s7.2-7.4 7.2-12.8A7.2 7.2 0 0 0 12 2zm0 9.7a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2z"/>
+    </symbol>
+    <symbol id="i-arrow-dr" viewBox="0 0 24 24">
+      <path d="M6 6l10.5 10.5M17 7v10H7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+    </symbol>
+    <symbol id="i-arrow-ur" viewBox="0 0 24 24">
+      <path d="M7 17L17.5 6.5M8 6h10v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+    </symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24">
+      <rect x="3" y="5.5" width="18" height="13" rx="1" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24">
+      <path d="M5 3h4l1.8 4.6-2.3 1.8a13 13 0 0 0 6.1 6.1l1.8-2.3L21 15v4a2 2 0 0 1-2.2 2A17.4 17.4 0 0 1 3 5.2 2 2 0 0 1 5 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24">
+      <rect x="8.5" y="8.5" width="12" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M15.5 4.5h-11v11" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <symbol id="i-up" viewBox="0 0 24 24">
+      <path d="M12 20V5M5.5 11L12 4.5 18.5 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+    </symbol>
+  </svg>
+
+  <!-- ============================================================
+       BOOT OVERLAY — brief "survey initialization" before reveal
+       ============================================================ -->
+  <div id="boot" class="boot" aria-hidden="true">
+    <div class="boot__inner">
+      <p class="boot__title">FIELD ATLAS // INITIALIZING SURVEY</p>
+      <ul class="boot__log">
+        <li>Establishing triangulation…</li>
+        <li>Loading tile cache — Dhaka sector…</li>
+        <li>Calibrating compass to true north…</li>
+        <li>Operator identified: RAKIBUL ISLAM</li>
+      </ul>
+      <p class="boot__meter"><span id="boot-pct">000</span><span class="boot__meter-tail">% — plotting</span></p>
+      <div class="boot__bar"><span id="boot-bar"></span></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       WIPE TRANSITION LAYER — shutter used for in-page navigation
+       ============================================================ -->
+  <div id="wipe" class="wipe" aria-hidden="true">
+    <div class="wipe__panel"></div>
+    <div class="wipe__panel"></div>
+    <div class="wipe__panel"></div>
+    <div class="wipe__panel"></div>
+    <p class="wipe__label">REDRAWING CHART…</p>
+  </div>
+
+  <!-- ============================================================
+       CUSTOM CURSOR — ring + dot that becomes a labeled pin
+       (enabled only on fine pointers, disabled for reduced motion)
+       ============================================================ -->
+  <div id="cursor" class="cursor" aria-hidden="true">
+    <div class="cursor__ring"><span class="cursor__label"></span></div>
+    <div class="cursor__dot"></div>
+  </div>
+
+  <!-- ============================================================
+       GRATICULE FRAME — fixed viewport rulers + live readouts
+       ============================================================ -->
+  <div class="frame" aria-hidden="true">
+    <div class="frame__ruler frame__ruler--top"></div>
+    <div class="frame__ruler frame__ruler--left"></div>
+    <span class="frame__cell frame__cell--tl">RI · FIELD ATLAS v3</span>
+    <span class="frame__cell frame__cell--tr mono"><span class="js-clock">--:--:--</span>&nbsp;DHK</span>
+    <span class="frame__cell frame__cell--bl">23.8103° N&nbsp;&nbsp;90.4125° E</span>
+    <span class="frame__cell frame__cell--br">SCROLL <span id="frame-progress">000%</span></span>
+  </div>
+
+  <!-- ============================================================
+       HEADER / NAVIGATION
+       ============================================================ -->
+  <header class="site-head">
+    <span class="site-head__trail" aria-hidden="true"></span>
+    <div class="site-head__bar wrap">
+      <a class="brand" href="#origin" data-cursor data-cursor-label="HOME" aria-label="Rakibul Islam — back to top">
+        <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 6l3.2 10.8L34 20l-10.8 3.2L20 34l-3.2-10.8L6 20l10.8-3.2z" fill="#E8501A"/>
+          <circle cx="20" cy="20" r="2.4" fill="#F3EEE3"/>
+        </svg>
+        <span class="brand__text">RAKIBUL<b>.ISLAM</b></span>
+      </a>
+
+      <nav class="primary-nav" id="primary-nav" aria-label="Chart sections">
+        <ol>
+          <li><a href="#logbook" data-cursor><sup>01</sup>Logbook</a></li>
+          <li><a href="#route" data-cursor><sup>02</sup>Route</a></li>
+          <li><a href="#loadout" data-cursor><sup>03</sup>Loadout</a></li>
+          <li><a href="#pins" data-cursor><sup>04</sup>Pins</a></li>
+          <li><a href="#dispatches" data-cursor><sup>05</sup>Dispatches</a></li>
+          <li><a href="#beacon" data-cursor><sup>06</sup>Contact</a></li>
+        </ol>
+      </nav>
+
+      <!-- Dark mode toggle: follows OS preference, overridable -->
+      <button class="theme-toggle mono" id="theme-toggle" type="button"
+              aria-pressed="false" title="Toggle dark mode">
+        <svg class="theme-toggle__icon" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="site-head__side">
+        <span class="beacon beacon--ok" title="Available for select projects"></span>
+        <span class="site-head__status">OPEN FOR DEPLOYMENTS</span>
+      </div>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ==========================================================
+         SECTION 00 — ORIGIN POINT (hero)
+         ========================================================== -->
+    <section class="hero" id="origin" aria-label="Origin point">
+      <div class="hero__grid wrap">
+
+        <div class="hero__intro">
+          <p class="hero__eyebrow mono" data-typing>// ORIGIN POINT &nbsp;·&nbsp; 23.8103° N, 90.4125° E &nbsp;·&nbsp; DHAKA, BANGLADESH</p>
+
+          <h1 class="hero__name">
+            <span class="hero__name-line hero__name-line--solid" data-split>Rakibul</span>
+            <span class="hero__name-line hero__name-line--ghost" data-split>Islam</span>
+          </h1>
+
+          <p class="hero__role">
+            Senior WordPress developer &amp; team lead. I've shipped
+            <strong>50+ production sites</strong> and command an eight-person squad
+            building WooCommerce stores, marketplaces, booking engines — and the
+            servers they live on.
+          </p>
+
+          <ul class="hero__stats" aria-label="Key numbers">
+            <li class="stat">
+              <span class="stat__num"><span data-count="4" data-suffix="+">4+</span></span>
+              <span class="stat__label">years in production</span>
+            </li>
+            <li class="stat">
+              <span class="stat__num"><span data-count="8" data-suffix="">8</span></span>
+              <span class="stat__label">developers led</span>
+            </li>
+            <li class="stat stat--accent">
+              <span class="stat__num"><span data-count="1" data-suffix="">1</span></span>
+              <span class="stat__label">plugin on WordPress.org</span>
+            </li>
+          </ul>
+
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#pins" data-magnetic data-cursor data-cursor-label="VIEW">
+              See deployed pins
+              <svg aria-hidden="true"><use href="#i-arrow-dr"/></svg>
+            </a>
+            <a class="btn btn--ghost" href="#beacon" data-magnetic data-cursor data-cursor-label="PING">
+              Drop a pin
+            </a>
+          </div>
+        </div>
+
+        <!-- Portrait inset: treated as a "satellite tile" pinned to the chart -->
+        <figure class="portrait" id="portrait">
+          <svg class="portrait__rings" viewBox="0 0 500 500" aria-hidden="true">
+            <circle cx="250" cy="250" r="120" />
+            <circle cx="250" cy="250" r="190" />
+            <circle cx="250" cy="250" r="245" />
+            <line x1="250" y1="0" x2="250" y2="500"/>
+            <line x1="0" y1="250" x2="500" y2="250"/>
+          </svg>
+
+          <div class="portrait__frame">
+            <img
+              class="portrait__img"
+              src="assets/img/portrait.jpg"
+              alt="Portrait of Rakibul Islam on a dark background"
+              width="800" height="1000"
+              decoding="async"
+            >
+            <i class="portrait__bracket portrait__bracket--tl"></i>
+            <i class="portrait__bracket portrait__bracket--tr"></i>
+            <i class="portrait__bracket portrait__bracket--bl"></i>
+            <i class="portrait__bracket portrait__bracket--br"></i>
+          </div>
+
+          <figcaption class="portrait__caption mono">
+            <span>SUBJECT // OPERATOR</span>
+            <span>TILE LOCKED · SAT LINK OK</span>
+            <span class="u-accent">STATUS: LEADING</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <a class="hero__cue" href="#logbook" data-cursor data-cursor-label="FOLLOW" aria-label="Scroll to The Logbook">
+        <span class="mono">SCROLL TO FOLLOW THE ROUTE</span>
+        <span class="hero__cue-line" aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <!-- ==========================================================
+         MARQUEE RIBBON — site types as a compass band
+         ========================================================== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <span>E-COMMERCE</span><span>MULTIVENDOR MARKETPLACES</span><span>BOOKING PLATFORMS</span><span>LMS / COURSE SITES</span><span>REAL ESTATE PORTALS</span><span>MEMBERSHIPS</span><span>DIRECTORIES</span><span>B2B</span><span>NON-PROFITS</span><span>MULTILINGUAL</span><span>HEADLESS WP</span><span>LANDING PAGES</span>
+        </div>
+        <div class="marquee__group" aria-hidden="true">
+          <span>E-COMMERCE</span><span>MULTIVENDOR MARKETPLACES</span><span>BOOKING PLATFORMS</span><span>LMS / COURSE SITES</span><span>REAL ESTATE PORTALS</span><span>MEMBERSHIPS</span><span>DIRECTORIES</span><span>B2B</span><span>NON-PROFITS</span><span>MULTILINGUAL</span><span>HEADLESS WP</span><span>LANDING PAGES</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         SECTION 01 — THE LOGBOOK (about / field notes)
+         ========================================================== -->
+    <section class="section wrap" id="logbook" aria-labelledby="logbook-title">
+      <header class="legend">
+        <p class="legend__no mono" data-reveal>N°01 — FIELD NOTES</p>
+        <h2 class="legend__title" id="logbook-title" data-split>The Logbook</h2>
+        <p class="legend__meta mono" data-reveal>KEEPER: R.I. · UPDATED AUG 2026<br>ENTRIES: HAND-WRITTEN, NO TEMPLATES</p>
+      </header>
+
+      <div class="logbook">
+        <div class="logbook__notes">
+          <article class="fieldnote" data-reveal>
+            <h3 class="fieldnote__head mono">// WHO'S OPERATING</h3>
+            <p>
+              I'm Rakibul Islam — a WordPress developer from Dhaka who treats websites
+              like infrastructure, not artwork that happens to load. Four-plus years and
+              multiple sites later, my work spans e-commerce floors, B2B machinery,
+              booking systems, course platforms, and marketplaces with dozens of moving
+              vendor parts.
+            </p>
+          </article>
+
+          <article class="fieldnote" data-reveal style="--d:.08s">
+            <h3 class="fieldnote__head mono">// CURRENT POSITION</h3>
+            <p>
+              At <strong>Softvence Agency</strong> (since Sept 2022) I lead an
+              <strong>8-member WordPress team</strong>: reviewing architecture, unblocking
+              builds, enforcing performance budgets, and still getting my hands dirty in
+              PHP when a project needs its hardest problem solved first.
+            </p>
+          </article>
+
+          <article class="fieldnote" data-reveal style="--d:.16s">
+            <h3 class="fieldnote__head mono">// HOW I WORK</h3>
+            <p>
+              Staging before production. WP-CLI before clicking around. Git before
+              "final_v2". Every handover documented so the next developer inherits a map,
+              not a mystery. If it isn't monitored, it's down — so I monitor.
+            </p>
+          </article>
+
+          <article class="fieldnote fieldnote--principles" data-reveal style="--d:.24s">
+            <h3 class="fieldnote__head mono">// FIELD PRINCIPLES</h3>
+            <ul>
+              <li>Clients feel speed before they see design.</li>
+              <li>Boring dependencies, exciting features.</li>
+              <li>A site that can't scale is a demo wearing a suit.</li>
+              <li>Automate the second time you do anything.</li>
+            </ul>
+          </article>
+        </div>
+
+        <aside class="logbook__facts" data-reveal style="--d:.2s" aria-label="Operator facts">
+          <h3 class="logbook__facts-title mono">OPERATOR DATA</h3>
+          <dl class="facts">
+            <div class="facts__row"><dt>BASE</dt><dd>Dhaka, Bangladesh<br><span class="facts__sub">GMT+6 · works global hours</span></dd></div>
+            <div class="facts__row"><dt>EDUCATION</dt><dd>B.Sc. Computer Science &amp; Engineering <em>(in progress)</em><br>Diploma in Computer Technology</dd></div>
+            <div class="facts__row"><dt>LANGUAGES</dt><dd>Bengali — native<br>English — professional working proficiency</dd></div>
+            <div class="facts__row"><dt>PUBLISHED</dt><dd><a class="facts__link" href="https://wordpress.org/plugins/mappin-location-locator/" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="WP.ORG">Mappin Location Locator<svg aria-hidden="true"><use href="#i-arrow-ur"/></svg></a><br><span class="facts__sub">live on the official WordPress.org repo</span></dd></div>
+            <div class="facts__row"><dt>STATUS</dt><dd class="u-accent-strong">Open for select projects</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SECTION 02 — THE ROUTE (experience timeline)
+         Scroll-linked rail fills as you travel down.
+         Waypoints render from ROUTE[] in js/data.js.
+         ========================================================== -->
+    <section class="section section--tint" id="route" aria-labelledby="route-title">
+      <div class="wrap">
+        <header class="legend">
+          <p class="legend__no mono" data-reveal>N°02 — WAYPOINTS LOGGED</p>
+          <h2 class="legend__title" id="route-title" data-split>The Route</h2>
+          <p class="legend__meta mono" data-reveal>FROM FIRST BUILD → TEAM LEAD<br>DISTANCE: 50+ DEPLOYMENTS</p>
+        </header>
+
+        <!-- ELEVATION TRAIL: a winding SVG path across stylized terrain.
+             A pin travels the path as you scroll; waypoints flare alive
+             when reached. Below 900px this degrades to the classic rail. -->
+        <div class="route route--terrain" id="route-map">
+          <div class="route__scenery" aria-hidden="true">
+            <i class="route__contour route__contour--a"></i>
+            <i class="route__contour route__contour--b"></i>
+            <i class="route__contour route__contour--c"></i>
+          </div>
+
+          <svg class="route__svg" viewBox="0 0 1000 1500" preserveAspectRatio="none" aria-hidden="true">
+            <!-- faint survey contours behind everything -->
+            <ellipse class="route__ring" cx="820" cy="260" rx="150" ry="90"/>
+            <ellipse class="route__ring" cx="200" cy="760" rx="120" ry="70"/>
+            <ellipse class="route__ring" cx="700" cy="1240" rx="160" ry="95"/>
+            <!-- the trail itself -->
+            <path id="route-track" class="route__trackpath" d="M 90 70 C 260 40, 420 120, 520 250 C 620 380, 480 470, 330 520 C 180 570, 170 700, 300 790 C 430 880, 700 820, 780 950 C 850 1065, 700 1160, 560 1210 C 420 1260, 430 1360, 520 1430"/>
+            <path id="route-draw" class="route__drawpath" d="M 90 70 C 260 40, 420 120, 520 250 C 620 380, 480 470, 330 520 C 180 570, 170 700, 300 790 C 430 880, 700 820, 780 950 C 850 1065, 700 1160, 560 1210 C 420 1260, 430 1360, 520 1430"/>
+          </svg>
+
+          <span class="route__marker" id="route-marker" aria-hidden="true">
+            <svg><use href="#i-pin"/></svg>
+            <i class="route__marker-pulse"></i>
+          </span>
+
+          <!-- mobile fallback rail (desktop hides this) -->
+          <div class="route__rail" aria-hidden="true">
+            <span class="route__track"></span>
+            <span class="route__fill" id="route-fill"></span>
+            <span class="route__runner" id="route-runner"></span>
+          </div>
+
+          <ol class="route__list" id="route-list">
+            <noscript><li>The route log needs JavaScript to plot — or just email me and I'll narrate it live.</li></noscript>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SECTION 03 — LOADOUT (skills)
+         Modules render from SKILL_GROUPS[] in js/data.js.
+         ========================================================== -->
+    <section class="section wrap" id="loadout" aria-labelledby="loadout-title">
+      <header class="legend">
+        <p class="legend__no mono" data-reveal>N°03 — INSTRUMENTS &amp; SYSTEMS</p>
+        <h2 class="legend__title" id="loadout-title" data-split>Loadout</h2>
+        <p class="legend__meta mono" data-reveal>05 MODULES · FIELD-TESTED<br>SELF-DIAGNOSIS: DANGEROUSLY COMFORTABLE</p>
+      </header>
+
+      <p class="loadout__intro" data-reveal>
+        Not a wall of logos — these are systems I operate weekly, grouped by what they're for.
+        Green beacons mean actively deployed in current client work.
+      </p>
+
+      <div class="modules" id="skill-grid" role="list">
+        <noscript><p class="mono">The instrument rack needs JavaScript to unpack. Email me for the plain-text inventory.</p></noscript>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SECTION 04 — DEPLOYED PINS (projects)
+         Cards render from PROJECTS[] in js/data.js.
+         To add a project: add one object there. Nothing else.
+         Hovering a card opens the simulated-browser preview
+         (js/preview.js); "case studies" archive: case-studies.html
+         ========================================================== -->
+    <section class="section section--tint" id="pins" aria-labelledby="pins-title">
+      <div class="wrap">
+        <header class="legend">
+          <p class="legend__no mono" data-reveal>N°04 — CASE STUDIES, NDA-SAFE</p>
+          <h2 class="legend__title" id="pins-title" data-split>Deployed Pins</h2>
+          <p class="legend__meta mono" data-reveal>HOVER A PIN — LIVE FULL-PAGE CAPTURE<br>REFERENCE SITES SHOWN UNTIL CLIENT URLS LAND</p>
+        </header>
+
+        <div class="filters" role="group" aria-label="Filter pins by terrain type">
+          <!-- chips injected by render.js -->
+          <output class="filters__count mono" id="pin-count" for="pin-list" aria-live="polite">00 PINS</output>
+        </div>
+
+        <ol class="pins-list" id="pin-list">
+          <noscript><li class="mono">The pin registry requires JavaScript. Alternatively: one email gets you the full tour.</li></noscript>
+        </ol>
+
+        <!-- Full archive: sites can't all live on this page -->
+        <div class="pins__more" data-reveal>
+          <p class="mono">SELECTED PROJECTS FROM MY PORTFOLIO</p>
+          <a class="btn btn--primary" href="case-studies.html" data-magnetic data-cursor data-cursor-label="ARCHIVE">
+            Browse all case studies
+            <svg aria-hidden="true"><use href="#i-arrow-ur"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SECTION 05 — DISPATCHES (blog teaser)
+         Cards render from BLOG_POSTS[] in js/data.js.
+         Full archive: dispatches.html · single: dispatch.html?d=slug
+         ========================================================== -->
+    <section class="section wrap" id="dispatches" aria-labelledby="dispatches-title">
+      <header class="legend">
+        <p class="legend__no mono" data-reveal>N°05 — FIELD DISPATCHES</p>
+        <h2 class="legend__title" id="dispatches-title" data-split>Dispatches</h2>
+        <p class="legend__meta mono" data-reveal>NOTES FROM ACTIVE EXPEDITIONS<br>WRITTEN BETWEEN DEPLOYMENTS</p>
+      </header>
+
+      <div class="posts" id="post-grid" role="list">
+        <noscript><p class="mono">The dispatch log needs JavaScript to unpack — or email me and I'll send the plain text.</p></noscript>
+      </div>
+
+      <div class="pins__more" data-reveal>
+        <p class="mono">THE FULL LOG HOLDS EVERY DISPATCH FROM THE FIELD</p>
+        <a class="btn btn--primary" href="dispatches.html" data-magnetic data-cursor data-cursor-label="LOG">
+          Read all dispatches
+          <svg aria-hidden="true"><use href="#i-arrow-ur"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SECTION 06 — DROP A PIN (contact, dark ink band)
+         ========================================================== -->
+    <section class="section section--ink contact" id="beacon" aria-labelledby="beacon-title">
+      <div class="wrap">
+        <header class="legend legend--ink">
+          <p class="legend__no mono" data-reveal>N°06 — TRANSMISSION</p>
+          <h2 class="legend__title" id="beacon-title" data-split>Drop a pin<span class="u-accent">.</span></h2>
+          <p class="legend__meta mono" data-reveal>FREQ: OPEN · RESPONSE &lt; 24H GMT+6</p>
+        </header>
+
+        <p class="contact__lede" data-reveal>
+          One message starts the route. Tell me what you're building — a store,
+          a marketplace, a rescue mission for a slow site — and I'll answer within a day.
+        </p>
+
+        <div class="contact__grid">
+          <!-- Direct channels -->
+          <div class="contact__channels" data-reveal>
+            <a class="channel" href="mailto:rirakeebplus@gmail.com" data-cursor data-cursor-label="WRITE">
+              <svg aria-hidden="true"><use href="#i-mail"/></svg>
+              <span class="channel__body">
+                <span class="channel__label mono">EMAIL</span>
+                <span class="channel__value">rirakeebplus@gmail.com</span>
+              </span>
+            </a>
+            <button class="channel channel--copy" type="button" data-copy="rirakeebplus@gmail.com" data-copy-toast="Email copied — talk soon." data-cursor data-cursor-label="COPY">
+              <svg aria-hidden="true"><use href="#i-copy"/></svg>
+              <span class="channel__body">
+                <span class="channel__label mono">COPY ADDRESS</span>
+                <span class="channel__value">one click, zero typing</span>
+              </span>
+            </button>
+            <a class="channel" href="tel:+8801920759102" data-cursor data-cursor-label="CALL">
+              <svg aria-hidden="true"><use href="#i-phone"/></svg>
+              <span class="channel__body">
+                <span class="channel__label mono">PHONE / WHATSAPP</span>
+                <span class="channel__value">+880 192 075 9102</span>
+              </span>
+            </a>
+            <a class="channel" href="https://wa.me/8801920759102" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="WHATSAPP">
+              <svg aria-hidden="true"><use href="#i-phone"/></svg>
+              <span class="channel__body">
+                <span class="channel__label mono">WHATSAPP</span>
+                <span class="channel__value">+880 192 075 9102</span>
+              </span>
+            </a>
+            <!-- Social Icons -->
+          <div class="contact__social" data-reveal style="--d:.16s">
+            <a class="social-icon" href="https://linkedin.com/in/rirakeeb" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="LINKEDIN" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a class="social-icon" href="https://facebook.com/rirakeeb" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="FACEBOOK" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a class="social-icon" href="https://instagram.com/rirakeeb" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="INSTAGRAM" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/></svg>
+            </a>
+            <a class="social-icon" href="https://twitter.com/rirakeeb_" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="TWITTER" aria-label="Twitter">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a class="social-icon" href="https://pinterest.com/rirakeeb" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="PINTEREST" aria-label="Pinterest">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641 0 12.017 0z"/></svg>
+            </a>
+            <a class="social-icon" href="https://medium.com/@rirakeeb" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="MEDIUM" aria-label="Medium">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+            </a>
+            <a class="social-icon" href="https://about.me/rirakeeb" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="ABOUT.ME" aria-label="About.me">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.373 0 12s5.372 12 12 12 12-5.373 12-12S18.628 0 12 0zm6.473 8.002c.053.699.054 1.394.002 2.093h-3.55c-.045-.665-.045-1.33 0-1.996h3.548zm-8.17 10.54c-2.642-.747-4.614-3.048-4.946-5.945h3.648c.225 1.41 1.242 2.587 2.64 2.94v3.005h-1.342zm4.397 0v-3.005c1.396-.353 2.413-1.53 2.64-2.94h3.647c-.333 2.897-2.305 5.198-4.947 5.945h-1.34zM7.65 8.002H3.888C3.833 8.698 3.834 9.396 3.89 10.095h3.76c-.045-.695-.045-1.33 0-2.093zm3.762-4.95c1.238.392 2.207 1.402 2.588 2.693h3.59C17.154 3.922 14.958 2.128 12.31 1.74v1.312zm-1.05-1.312C8.613 2.128 6.416 3.922 5.822 5.745h3.59c.381-1.291 1.35-2.301 2.588-2.693v-1.312zM4.547 12c0-.696.065-1.38.176-2.044H.712C.24 10.658 0 11.314 0 12s.24 1.342.712 2.044h3.995A12.15 12.15 0 014.547 12zm7.453 8.258v-1.312c2.648-.388 4.845-2.182 5.428-4.003h-3.59c-.381 1.291-1.35 2.301-2.588 2.693v2.622h.75zm-1.05-1.312v-2.622c-1.238-.392-2.207-1.402-2.588-2.693H4.862c-.583 1.821-2.78 3.615-5.428 4.003v1.312h9.088zm-9.46-5.946h3.76c.045-.665.045-1.33 0-1.996H1.49c-.055.666-.054 1.331 0 1.996z"/></svg>
+            </a>
+          </div>
+      </div>
+          <!-- Compose Form -->
+          <form class="compose" data-reveal style="--d:.12s" id="compose-form">
+            <h3 class="compose__title mono">COMPOSE TRANSMISSION</h3>
+            <label class="compose__field">
+              <span class="mono">SUBJECT</span>
+              <input type="text" name="subject" placeholder="New build / rescue mission / question" autocomplete="off" required>
+            </label>
+            <label class="compose__field">
+              <span class="mono">MESSAGE</span>
+              <textarea name="message" rows="4" placeholder="What are we deploying?" required></textarea>
+            </label>
+            <button class="btn btn--accent" type="submit" data-magnetic data-cursor data-cursor-label="SEND">
+              Open in my mail app
+              <svg aria-hidden="true"><use href="#i-arrow-ur"/></svg>
+            </button>
+            <p class="compose__note mono">
+              This is a static site — honestly. The button just opens YOUR email app
+              pre-addressed to me. No servers were harmed.
+            </p>
+          </form>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FOOTER — end of the chart
+       ============================================================ -->
+  <footer class="site-foot" aria-label="Colophon">
+    <div class="wrap">
+      <div class="site-foot__top">
+        <p class="site-foot__big" aria-hidden="true">End of the chart<span class="u-accent">_</span></p>
+        <button class="totop" type="button" id="to-top" data-magnetic data-cursor data-cursor-label="UP" aria-label="Back to origin point">
+          <svg aria-hidden="true"><use href="#i-up"/></svg>
+        </button>
+      </div>
+
+      <div class="site-foot__cols mono">
+        <div>
+          <h4>ABOUT</h4>
+          <p>Senior WordPress Developer & Team Lead based in Dhaka, Bangladesh.<br>sites shipped. 8 developers led. Open for select projects.</p>
+        </div>
+        <div>
+          <h4>MY PLUGIN</h4>
+          <p><a href="https://wordpress.org/plugins/mappin-location-locator/" target="_blank" rel="noopener noreferrer" data-cursor data-cursor-label="WP.ORG">Mappin Location Locator ↗</a><br>Location & Store Locator · live on WordPress.org</p>
+        </div>
+        <div>
+          <h4>CONNECT</h4>
+          <p><a href="mailto:rirakeebplus@gmail.com">rirakeebplus@gmail.com</a><br><a href="https://linkedin.com/in/rirakeeb" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></p>
+          <p style="margin-top:12px">FIELD BASE — <span class="js-clock">--:--:--</span> GMT+6<br>Dhaka, Bangladesh</p>
+        </div>
+      </div>
+
+      <div class="site-foot__base mono">
+        <span>© <span id="year">2026</span> RAKIBUL ISLAM — ALL ROUTES RESERVED</span>
+        <span class="site-foot__secret-wrap">
+          <!-- Easter egg: a shy little pin hiding in the colophon -->
+          <button class="secret-pin" type="button" id="secret-pin" aria-label="An unremarkable dot" title="">
+            <svg aria-hidden="true"><use href="#i-pin"/></svg>
+          </button>
+        </span>
+        <span>SURVEYED AT 23.8103° N, 90.4125° E</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast: single polite status region reused by JS -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- ============================================================
+       TEMPLATES — cloned by js/render.js.
+       Structure lives HERE, content lives in js/data.js.
+       ============================================================ -->
+
+  <template id="tpl-waypoint">
+    <li class="waypoint route__stop">
+      <span class="route__flag" aria-hidden="true"></span>
+      <div class="waypoint__card">
+        <header class="waypoint__era mono">
+          <span class="waypoint__kicker"></span>
+          <span class="waypoint__dates"></span>
+        </header>
+        <h3 class="waypoint__role"></h3>
+        <p class="waypoint__org mono"></p>
+        <ul class="waypoint__points"></ul>
+      </div>
+      <!-- Mobile-only rail node (desktop terrain hides this) -->
+      <div class="waypoint__node" aria-hidden="true"><span class="waypoint__dot"></span></div>
+    </li>
+  </template>
+
+  <template id="tpl-post">
+    <article class="post" data-reveal role="listitem">
+      <header class="post__head">
+        <span class="post__tag mono"></span>
+        <span class="post__stamp mono"><span class="post__date"></span> · <span class="post__read"></span></span>
+      </header>
+      <h3 class="post__title"></h3>
+      <p class="post__excerpt"></p>
+      <a class="post__link mono" href="#">Read dispatch<svg aria-hidden="true"><use href="#i-arrow-dr"/></svg></a>
+    </article>
+  </template>
+
+  <template id="tpl-skill">
+    <article class="module" data-reveal role="listitem">
+      <header class="module__head">
+        <span class="beacon beacon--ok" aria-hidden="true"></span>
+        <h3 class="module__name"></h3>
+        <span class="module__code mono" aria-hidden="true"></span>
+      </header>
+      <p class="module__blurb"></p>
+      <ul class="chipset"></ul>
+    </article>
+  </template>
+
+  <template id="tpl-pin">
+    <li class="pin" data-reveal>
+      <span class="pin__hint mono" aria-hidden="true">HOVER — LIVE PREVIEW</span>
+      <button class="pin__head" type="button" aria-expanded="false" role="heading" aria-level="3">
+        <span class="pin__index mono" aria-hidden="true">00</span>
+        <svg class="pin__marker" aria-hidden="true"><use href="#i-pin"/></svg>
+        <span class="pin__idblock">
+          <span class="pin__title"></span>
+          <span class="pin__meta mono"></span>
+        </span>
+        <span class="pin__coord mono" aria-hidden="true"></span>
+        <span class="pin__toggle" aria-hidden="true"></span>
+      </button>
+      <div class="pin__body">
+        <div class="pin__inner">
+          <!-- Touch devices: live capture injected here on expand -->
+          <div class="pin__capture" hidden></div>
+          <p class="pin__summary"></p>
+          <div class="pin__cols">
+            <div class="pin__col">
+              <h4 class="mono">SCOPE</h4>
+              <ul class="pin__scope"></ul>
+            </div>
+            <div class="pin__col">
+              <h4 class="mono">STACK</h4>
+              <ul class="chipset chipset--tight"></ul>
+            </div>
+          </div>
+          <p class="pin__outcome mono"></p>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <!-- Scripts: classic scripts (no modules) so file:// double-click works too.
+       Order matters: state → data → render → preview → cursor → motion → boot -->
+  <script src="js/state.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/boot.js"></script>
+</body>
+</html>

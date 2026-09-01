@@ -1,0 +1,177 @@
+/* ============================================================
+   motion.css — keyframes, reveal system, split-text, reduced
+   motion fallbacks. All animation uses transform/opacity
+   (GPU-friendly). Scroll triggers come from IntersectionObserver;
+   only the route fill reads scroll position (rAF-throttled).
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   KEYFRAMES
+   ------------------------------------------------------------ */
+@keyframes caret-blink { 50% { opacity: 0; } }
+
+@keyframes beacon-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(47, 158, 68, .45); }
+  70%  { box-shadow: 0 0 0 9px rgba(47, 158, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(47, 158, 68, 0); }
+}
+
+@keyframes cue-drip {
+  from { background-position: 0 -100%; }
+  to   { background-position: 0  200%; }
+}
+
+/* Shifts left by exactly ONE group width (set in px by JS after
+   cloning enough copies to cover the viewport). The 50% fallback
+   keeps it working with the static 2-copy markup if JS is off. */
+@keyframes marquee-scroll {
+  to { transform: translateX(calc(-1 * var(--shift, 50%))); }
+}
+
+@keyframes pin-wiggle {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -14deg; }
+  60% { rotate: 10deg; }
+}
+
+@keyframes marker-pulse {
+  from { transform: scale(.55); opacity: .9; }
+  to   { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes pv-shimmer {
+  to { background-position: -200% 0; }
+}
+
+@keyframes rings-spin {
+  to { transform: rotate(360deg); }
+}
+.portrait__rings { animation: rings-spin 90s linear infinite; transform-origin: center; }
+
+/* ------------------------------------------------------------
+   REVEAL SYSTEM — [data-reveal] elements slide up once when the
+   IntersectionObserver marks them .is-inview. --d staggers.
+   ------------------------------------------------------------ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity .7s var(--ease-out) var(--d, 0ms),
+    transform .7s var(--ease-out) var(--d, 0ms);
+}
+[data-reveal].is-inview { opacity: 1; transform: none; }
+
+/* ------------------------------------------------------------
+   SPLIT TEXT — js/motion.js wraps characters of [data-split]
+   into .word > .chr spans. Chars rise out of clipped words.
+   ------------------------------------------------------------ */
+.word { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .08em; margin-bottom: -.08em; }
+
+.chr {
+  display: inline-block;
+  transform: translateY(115%) rotate(4deg);
+  transition:
+    transform .6s var(--ease-io) calc(var(--i) * 26ms),
+    opacity     .5s ease          calc(var(--i) * 26ms);
+  opacity: 0;
+}
+.is-inview .chr,
+body:not([data-loading]) .hero__name .chr {
+  transform: none;
+  opacity: 1;
+}
+
+/* Hero name gets a slower, more theatrical stagger */
+.hero__name .chr { transition-duration: .8s; transition-timing-function: var(--ease-out); }
+
+/* ------------------------------------------------------------
+   HERO INTRO CHOREOGRAPHY — children wait for boot overlay to
+   lift (body[data-loading] removed), then cascade via one-shot
+   ANIMATIONS (not transitions, so later inline transforms like
+   the portrait parallax stay snappy). `backwards` fill keeps
+   each element hidden until its delayed start.
+   ------------------------------------------------------------ */
+@keyframes intro-rise {
+  from { opacity: 0; transform: translateY(26px); }
+}
+
+body[data-loading] :is(.hero__eyebrow, .hero__role, .hero__stats, .hero__cta, .portrait, .hero__cue) {
+  opacity: 0;
+}
+body:not([data-loading]) .hero__eyebrow { animation: intro-rise .8s  var(--ease-out) backwards; }
+body:not([data-loading]) .hero__role    { animation: intro-rise .8s  var(--ease-out) .22s backwards; }
+body:not([data-loading]) .hero__stats   { animation: intro-rise .8s  var(--ease-out) .34s backwards; }
+body:not([data-loading]) .hero__cta     { animation: intro-rise .8s  var(--ease-out) .46s backwards; }
+body:not([data-loading]) .portrait      { animation: intro-rise .9s  var(--ease-out) .55s backwards; }
+body:not([data-loading]) .hero__cue     { animation: intro-rise .8s  var(--ease-out) .85s backwards; }
+
+/* Portrait mask-wipe on first reveal */
+@keyframes tile-unveil {
+  to { clip-path: inset(0 0 0 0); }
+}
+.portrait__frame { clip-path: inset(100% 0 0 0); }
+body:not([data-loading]) .portrait__frame { animation: tile-unveil 1s var(--ease-io) .55s forwards; }
+
+/* ------------------------------------------------------------
+   FILTER SWAP — brief fade for card list re-renders
+   ------------------------------------------------------------ */
+.cards.is-swapping .pcard { opacity: 0; transform: translateY(12px); transition-duration: .18s; }
+
+/* ------------------------------------------------------------
+   CALM MODE (html.motion-off) — driven by the MOTION toggle in
+   the header (js/state.js), remembered across visits.
+   Motion is ON by default; this block makes the site fully
+   usable with zero animation for anyone who prefers stillness.
+   ------------------------------------------------------------ */
+html.motion-off { scroll-behavior: auto; }
+
+html.motion-off *,
+html.motion-off *::before,
+html.motion-off *::after {
+  animation-duration: .01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .01ms !important;
+  transition-delay: 0ms !important;
+}
+
+html.motion-off [data-reveal],
+html.motion-off .hero__eyebrow,
+html.motion-off .hero__role,
+html.motion-off .hero__stats,
+html.motion-off .hero__cta,
+html.motion-off .portrait,
+html.motion-off .hero__cue,
+html.motion-off .portrait__frame {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+  animation: none !important;
+}
+
+html.motion-off .chr { transform: none; opacity: 1; }
+
+/* Marquee: single tidy row — no scrollbar, no drift */
+html.motion-off .marquee__track { animation: none; }
+html.motion-off .marquee__group:not(:first-child) { display: none; }
+
+/* Route shows fully drawn; no travelling pin */
+html.motion-off .route__fill { height: 100% !important; }
+html.motion-off .route__runner { display: none; }
+
+/* Skip the boot theatre entirely */
+html.motion-off #boot { display: none !important; }
+
+/* Route in calm mode: fall back to the readable rail everywhere,
+   since the travelling pin is inherently motion */
+html.motion-off .route--terrain { height: auto; }
+html.motion-off .route__svg,
+html.motion-off .route__scenery,
+html.motion-off .route__marker,
+html.motion-off .route__flag { display: none !important; }
+html.motion-off .route__rail { display: block !important; }
+html.motion-off .waypoint__node { display: block; }
+html.motion-off .route__list { display: grid; gap: clamp(48px, 8vh, 84px); height: auto; }
+html.motion-off .route__stop { position: static; width: auto; }
+
+/* Calm mode: static shimmer block, no sweep; captures still show */
+html.motion-off .preview.is-loading .preview__viewport::before { animation: none; }
