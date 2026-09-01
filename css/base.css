@@ -58,7 +58,7 @@
    are used by .section--ink and .site-foot which must stay dark
    in both modes.
    ------------------------------------------------------------ */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --paper:      #15110D;
     --paper-2:    #1D1914;
@@ -81,7 +81,7 @@
     --glow-a: rgba(255, 107, 53, .075);
     --glow-b: rgba(74, 222, 128, .05);
   }
-}
+} */
 
 /* Manual dark mode toggle: html.dark forces dark tokens */
 html.dark {
