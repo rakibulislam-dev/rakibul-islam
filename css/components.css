@@ -335,6 +335,7 @@ body.has-cursor button { cursor: none; }
 
 .pin__outcome {
   padding: 13px 16px;
+  margin-block-end: 2px; /* inner already carries the bottom air */
   border-left: 3px solid var(--accent);
   background: var(--accent-soft);
   color: var(--ink);
@@ -451,8 +452,9 @@ body.has-cursor button { cursor: none; }
 .pin__head:hover .pin__toggle { border-color: var(--ink); }
 .pin.is-open .pin__toggle {
   rotate: 225deg;
-  background: var(--ink);
-  border-color: var(--ink);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff; /* keep the × icon visible on the accent fill in both themes */
 }
 
 /* Accordion body via the grid-template-rows trick */
@@ -468,11 +470,20 @@ body.has-cursor button { cursor: none; }
   overflow: hidden;
   padding-left: 102px;
   padding-right: 96px;
+  padding-block-end: 26px;
   max-width: 980px;
 }
 .pin.is-open .pin__inner { visibility: visible; }
 
 .pin__summary { color: var(--ink-2); max-width: 62ch; padding-block: 4px 20px; }
+
+/* Open-site action row: keeps clear air between the button and
+   the dashed rule of the columns below it */
+.pin__action {
+  display: flex;
+  align-items: center;
+  margin-block: 0 22px;
+}
 
 .pin__cols {
   display: grid;
@@ -487,7 +498,8 @@ body.has-cursor button { cursor: none; }
   .pin__head { grid-template-columns: 34px minmax(0, 1fr) 36px; padding: 20px 52px 20px 2px; }
   .pin__index, .pin__coord { display: none; }
   .pin::after { display: none; }
-  .pin__inner { padding-left: 38px; padding-right: 20px; }
+  .pin__inner { padding-left: 38px; padding-right: 20px; padding-block-end: 20px; }
+  .pin__action { margin-block-end: 18px; }
   .pin__cols { grid-template-columns: 1fr; }
 }
 

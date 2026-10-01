@@ -157,6 +157,20 @@
       if (open) injectCapture($(".pin__capture", li), project);
     });
 
+    /* Open-site link: unhide and point at the live URL when the
+       project has one; drop the whole row otherwise. */
+    const openSlot = $("[data-open-slot]", li);
+    if (openSlot) {
+      if (project.link) {
+        openSlot.hidden = false;
+        openSlot.href = project.link;
+        openSlot.target = "_blank";
+        openSlot.rel = "noopener noreferrer";
+      } else {
+        openSlot.closest(".pin__action").remove();
+      }
+    }
+
     const scope = $(".pin__scope", li);
     safeList(project.scope).forEach((line) => {
       const item = document.createElement("li");

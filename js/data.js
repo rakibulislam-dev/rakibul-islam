@@ -20,9 +20,9 @@
    │  4. Done — lists, filters, counts and previews update.  │
    └─────────────────────────────────────────────────────────┘
 
-   ⚠ DEMO STATE: `link` fields currently point at well-known
-   public websites so previews show REAL captures. Replace each
-   with your own client URL when ready — nothing else changes.
+   Every project below is a live client build — the hover preview
+   grabs a REAL full-page capture of the live URL automatically
+   (thum.io fullpage → mShots fallback). No link = simulated mock.
    ============================================================ */
 
 /* Filter chips: key → label. Rendered in this order. */
@@ -40,21 +40,6 @@ const FILTERS = {
 const PROJECTS = [
   {
     id: "pin-01",
-    title: "Vital Guard Pharma",
-    type: "marketplace",
-    meta: "B2B PHARMACEUTICAL DISTRIBUTION",
-    coord: "GRID 04 · 11",
-    domain: "vitalguardpharma.com",
-    tint: "#2F9E44",
-    summary:
-      "B2B ordering platform for a pharmaceutical distributor serving wholesalers, pharmacies, and clinics. Built with B2B King for account approval workflows plus heavy custom development, and a fully custom WooCommerce dashboard rebuilt with added features.",
-    scope: ["B2B King account approval workflows", "Custom WooCommerce dashboard rebuild", "Wholesaler, pharmacy & clinic ordering", "Role-based pricing and approval logic"],
-    stack: ["WooCommerce", "B2B King", "ACF Pro", "PHP", "MySQL"],
-    outcome: "OUTCOME // Streamlined B2B ordering for pharmaceutical distribution.",
-    link: "https://vitalguardpharma.com",
-  },
-  {
-    id: "pin-02",
     title: "Bush 2 City Adventure",
     type: "booking",
     meta: "LUXURY SAFARI TOUR BOOKING",
@@ -67,6 +52,21 @@ const PROJECTS = [
     stack: ["WooCommerce", "ACF Pro", "JetEngine", "Elementor Pro", "REST API"],
     outcome: "OUTCOME // Full-featured safari booking platform with real-time filtering.",
     link: "https://bush2cityadventure.com",
+  },
+  {
+    id: "pin-02",
+    title: "Vital Guard Pharma",
+    type: "marketplace",
+    meta: "B2B PHARMACEUTICAL DISTRIBUTION",
+    coord: "GRID 04 · 11",
+    domain: "vitalguardpharma.com",
+    tint: "#2F9E44",
+    summary:
+      "B2B ordering platform for a pharmaceutical distributor serving wholesalers, pharmacies, and clinics. Built with B2B King for account approval workflows plus heavy custom development, and a fully custom WooCommerce dashboard rebuilt with added features.",
+    scope: ["B2B King account approval workflows", "Custom WooCommerce dashboard rebuild", "Wholesaler, pharmacy & clinic ordering", "Role-based pricing and approval logic"],
+    stack: ["WooCommerce", "B2B King", "ACF Pro", "PHP", "MySQL"],
+    outcome: "OUTCOME // Streamlined B2B ordering for pharmaceutical distribution.",
+    link: "https://vitalguardpharma.com",
   },
   {
     id: "pin-03",
@@ -156,52 +156,42 @@ const SKILL_GROUPS = [
    ROUTE — experience waypoints plotted along the elevation trail.
    `frac` = position along the SVG path (0 start → 1 summit end).
    ------------------------------------------------------------ */
-const ROUTE_FRACTIONS = [0.04, 0.35, 0.65, 0.92];
+const ROUTE_FRACTIONS = [0.08, 0.52, 0.94];
 
 const ROUTE = [
   {
-    kicker: "WAYPOINT 00",
-    dates: "2018 - 2022",
-    role: "Diploma in Computer Technology",
-    org: "PATUAKHALI POLYTECHNIC INSTITUTE",
-    points: [
-      "First line of code, first broken localhost, first all-nighter fixing both.",
-      "Fell for the web specifically: visible results, immediate feedback.",
-      "Foundation in computer technology and engineering.",
-    ],
-  },
-  {
     kicker: "WAYPOINT 01",
-    dates: "2022 - EARLY YEARS",
-    role: "WordPress Developer - Freelance & Agency Work",
-    org: "LEARNING THE TERRAIN",
+    dates: "APR 2022 - JUL 2024",
+    role: "WordPress Developer — Freelance",
+    org: "SELF-EMPLOYED · DHAKA, BANGLADESH · REMOTE",
     points: [
-      "Cut my teeth on business sites, small stores, and rescue jobs other devs abandoned.",
-      "Learned that deadlines, backups and communication ship products - not just code.",
-      "Began B.Sc. in Computer Science & Engineering at Bangladesh University (in progress).",
+      "Delivered 65+ WordPress and WooCommerce websites end to end — discovery, build, QA, handoff.",
+      "Built dynamic, client-editable sites with Elementor, WooCommerce and ACF Pro.",
+      "Applied on-page SEO, security hardening and performance tuning as standard on every build.",
+      "Ran it fully remote — international clients across time zones, no account manager to lean on.",
     ],
   },
   {
     kicker: "WAYPOINT 02",
-    dates: "SEPT 2022 - PRESENT",
+    dates: "AUG 2024 - PRESENT",
     role: "Senior WordPress Developer",
-    org: "SOFTVENCE AGENCY (FIVERR) - REMOTE",
+    org: "SOFTVENCE AGENCY · DHAKA OFFICE · FIVERR-BASED CLIENTS",
     points: [
-      "Manage full client lifecycle for international clients via Fiverr, from discovery calls through scoping, development, and delivery.",
-      "Deliver WordPress websites across e-commerce, corporate, service, real estate, travel, and healthcare projects.",
-      "Build advanced dynamic content with ACF Pro and the Crocoblock plugin suite.",
-      "Integrate REST APIs, webhooks, AI features, and payment gateways into client sites.",
-      "Published Mappin Location Locator on the official WordPress.org repository.",
+      "Went full-time at Softvence after two years solo — working from the agency's office on Fiverr-based international projects.",
+      "Shipped 100+ websites across e-commerce, corporate, real estate, travel and service industries.",
+      "Architected dynamic ACF Pro / Crocoblock systems clients can run themselves post-launch.",
+      "Delivered 30+ integrations: REST APIs, webhooks, AI features and payment gateways.",
     ],
   },
   {
     kicker: "SUMMIT",
     dates: "PRESENT",
-    role: "Team Lead - WordPress Development Squad",
-    org: "SOFTVENCE AGENCY - 8 DEVELOPERS",
+    role: "Team Lead — WordPress Development Squad",
+    org: "SOFTVENCE AGENCY · 8 DEVELOPERS",
     points: [
-      "Lead an 8-person WordPress development team, running daily sprint planning, mentoring, and resolving technical blockers.",
-      "Communicate directly with clients via video calls, live meetings, and text throughout every project.",
+      "Lead an 8-person team: daily sprint planning, mentoring, clearing technical blockers.",
+      "Own client communication across time zones — daily video calls, live meetings, written updates.",
+      "Maintain a 90%+ on-time delivery rate, flagging timeline changes early on complex work.",
       "Still writes PHP on Fridays. Some habits are load-bearing.",
     ],
   },
@@ -210,31 +200,14 @@ const ROUTE = [
 /* ============================================================
    CASE STUDIES — the archive page (case-studies.html)
    ------------------------------------------------------------
-   ⚠ DEMO ENTRIES: famous public websites powering real live
-   captures. Replace objects with your client work (same fields)
-   whenever ready — previews follow automatically.
    ============================================================ */
 const CASE_STUDIES = [
   {
     id: "cs-01",
-    title: "Vital Guard Pharma - B2B Pharmaceutical Distribution",
-    type: "marketplace",
-    meta: "B2B PHARMACEUTICAL DISTRIBUTION",
-    coord: "CS 01 - 09",
-    domain: "vitalguardpharma.com",
-    tint: "#2F9E44",
-    summary: "B2B ordering platform for a pharmaceutical distributor serving wholesalers, pharmacies, and clinics. Built with B2B King for account approval workflows plus heavy custom development, and a fully custom WooCommerce dashboard rebuilt with added features.",
-    scope: ["B2B King account approval workflows", "Custom WooCommerce dashboard rebuild", "Wholesaler, pharmacy & clinic ordering"],
-    stack: ["WooCommerce", "B2B King", "ACF Pro", "PHP", "MySQL"],
-    outcome: "OUTCOME // Streamlined B2B ordering for pharmaceutical distribution.",
-    link: "https://vitalguardpharma.com",
-  },
-  {
-    id: "cs-02",
     title: "Bush 2 City Adventure - Luxury Safari Tours",
     type: "booking",
     meta: "SAFARI TOUR BOOKING",
-    coord: "CS 02 - 09",
+    coord: "CS 01 - 09",
     domain: "bush2cityadventure.com",
     tint: "#D8222A",
     summary: "Travel booking site with dynamic tour filtering by country, park, style, and budget across 180+ packages, custom quote-request forms, and Google/TripAdvisor review integration.",
@@ -242,6 +215,20 @@ const CASE_STUDIES = [
     stack: ["WooCommerce", "ACF Pro", "JetEngine", "Elementor Pro"],
     outcome: "OUTCOME // Full-featured safari booking platform with real-time filtering.",
     link: "https://bush2cityadventure.com",
+  },
+  {
+    id: "cs-02",
+    title: "Vital Guard Pharma - B2B Pharmaceutical Distribution",
+    type: "marketplace",
+    meta: "B2B PHARMACEUTICAL DISTRIBUTION",
+    coord: "CS 02 - 09",
+    domain: "vitalguardpharma.com",
+    tint: "#2F9E44",
+    summary: "B2B ordering platform for a pharmaceutical distributor serving wholesalers, pharmacies, and clinics. Built with B2B King for account approval workflows plus heavy custom development, and a fully custom WooCommerce dashboard rebuilt with added features.",
+    scope: ["B2B King account approval workflows", "Custom WooCommerce dashboard rebuild", "Wholesaler, pharmacy & clinic ordering"],
+    stack: ["WooCommerce", "B2B King", "ACF Pro", "PHP", "MySQL"],
+    outcome: "OUTCOME // Streamlined B2B ordering for pharmaceutical distribution.",
+    link: "https://vitalguardpharma.com",
   },
   {
     id: "cs-03",
@@ -361,6 +348,79 @@ const CASE_STUDIES = [
    └─────────────────────────────────────────────────────────┘
    ============================================================ */
 const BLOG_POSTS = [
+  {
+    slug: "clickfix-malware-wordpress-basic-safety",
+    title: "ClickFix Malware Is Hunting WordPress Admins: The Basic Safety Drill",
+    tag: "SECURITY",
+    date: "2026-09-18",
+    displayDate: "SEP 2026",
+    readMinutes: 7,
+    excerpt:
+      "ClickFix tricks people into running malware themselves — and WordPress admins are a favorite target. How the attack chain actually works, the basic safety drill that beats it, and what to do in the first hour after a slip.",
+    body: [
+      { p: "ClickFix is not a plugin vulnerability and not a theme flaw. It is a social-engineering trick that turns a website visitor into the attacker's own hands — and since it first appeared it has become one of the fastest-growing infection chains on the web. WordPress admins are a favorite target for a simple reason: we live in dashboards, we paste things, and we click update for a living." },
+      { h2: "The anatomy of a ClickFix attack" },
+      { p: "The victim lands on a page that looks completely legitimate — a CAPTCHA verification, a message that the browser needs to be updated, an error claiming a video cannot play until you prove you are human. Solving it walks you through a few harmless-looking keyboard steps: open the Windows Run dialog, press Ctrl+V, press Enter. What you actually pasted is a command that downloads and executes malware. No exploit, no zero-day — you installed it yourself." },
+      { list: [
+        "A fake CAPTCHA, verification page or error screen earns your trust",
+        "It instructs you to open the Run dialog (Win + R) or a terminal",
+        "The attack page silently copies a command to your clipboard",
+        "You paste and press Enter — a loader like Lumma executes within seconds",
+        "Stolen cookies and saved logins are sold off; your wp-admin is next in line",
+      ] },
+      { h2: "Why WordPress people are prime targets" },
+      { p: "Three doors lead WordPress teams into ClickFix. First, malvertising: attackers buy ads for searches like wp-admin login and land you on a pixel-perfect fake. Second, injection: compromised sites serve the fake-CAPTCHA script to every visitor, so even careful browsing gets hit. Third, phishing: a convincing email about a plugin update that really needs you to run a quick verification." },
+      { quote: "No legitimate website will ever ask you to open the Run dialog. No update wizard has ever lived in PowerShell." },
+      { h2: "The basic safety drill" },
+      { list: [
+        "Never paste a command you did not write — clipboard discipline beats antivirus",
+        "Kill the Run dialog organization-wide with group policy, or run an extension that blocks paste-into-Run attacks",
+        "Two-factor authentication on every wp-admin account — no exceptions for senior staff",
+        "Install plugins and themes from wordpress.org or vetted vendors only; updates happen in the dashboard, never from email links",
+        "Least privilege: editors get editor, not administrator — one admin account per human",
+        "A WAF in front of the site (Cloudflare rules or Wordfence) plus scheduled malware scans",
+        "Off-site backups with a restore drill — an untested backup is a hope, not a backup",
+        "Hunt for persistence monthly: unknown admin users, strange scheduled tasks, unfamiliar files in uploads",
+      ] },
+      { h2: "If you already pressed Enter" },
+      { p: "Speed matters more than perfection. From a clean device, rotate the hosting panel, SFTP, database and wp-admin credentials, revoke API keys and application passwords, then restore from a backup taken before the infection. After that, sweep for persistence: rogue administrator accounts, modified core files, dropped plugin shells. Only then go back to work." },
+      { p: "On my team this drill is onboarding material, not a warning poster. Every developer learns the ClickFix pattern in week one, because the tool that actually beats it is not a security plugin — it is a reflex." },
+    ],
+  },
+  {
+    slug: "jetengine-vs-acf-client-editable-wordpress",
+    title: "JetEngine vs ACF Pro: Why We Build Client-Editable Sites with Crocoblock",
+    tag: "PLUGINS",
+    date: "2026-09-02",
+    displayDate: "SEP 2026",
+    readMinutes: 6,
+    excerpt:
+      "ACF Pro or Crocoblock's JetEngine? We build with both. The honest decision rule our WordPress team uses — and why JetEngine gets the default slot for dynamic, client-editable sites.",
+    body: [
+      { p: "Every dynamic WordPress project starts with the same decision: which field system leads the stack. We build with both ACF Pro and the Crocoblock suite, and the honest answer is that neither one always wins — the right pick depends on who operates the site after launch. Here is the decision rule we actually use on client work, not the theoretical one." },
+      { h2: "What ACF Pro is still unbeatable at" },
+      { p: "ACF Pro is a developer's instrument: a clean, lean data layer that stays out of the way. When a developer owns the templates and the build is bespoke, nothing matches its precision." },
+      { list: [
+        "Bespoke themes where a developer renders every template in PHP",
+        "Headless and API-driven builds — fields as a pure data layer",
+        "Sites under a maintenance contract, where layout changes are dev work by design",
+        "Performance-sensitive builds that want zero extra front-end machinery",
+      ] },
+      { h2: "Where JetEngine earns its keep" },
+      { p: "JetEngine answers a different question: who maintains the site when we are not in the room. Its listings, repeaters and Query Builder render dynamic content on the front end without a single custom template — which means the client can duplicate a listing card, add a service, or reorder a portfolio without opening a single dev ticket." },
+      { list: [
+        "Front-end listings and repeaters render without custom PHP templates",
+        "Query Builder assembles complex loops — filters, relations, WooCommerce data — visually",
+        "Dynamic visibility and conditional logic without touching code",
+        "The suite covers the whole dynamic stack: JetFormBuilder, JetWooBuilder, JetSmartFilters",
+        "Post-launch, clients edit and duplicate layouts themselves — nothing breaks",
+      ] },
+      { h2: "The decision rule we actually use" },
+      { p: "If the client will keep editing structure after launch and there is no developer on retainer, JetEngine leads the stack — the cost of that flexibility is baked into the tool instead of billed to the client later. If the build is bespoke, contract-locked, and a developer owns every template, ACF Pro leads. And on the largest builds we use both: ACF Pro as the clean data layer, JetEngine as the rendering engine on top." },
+      { quote: "The best field system is not the one with the cleanest schema — it is the one the client can still operate two months after you have left the building." },
+      { p: "Neither tool is a religion. ACF Pro and JetEngine both ship production-grade dynamic sites; the professional move is choosing for the operator who inherits it, not for the developer who builds it." },
+    ],
+  },
   {
     slug: "the-one-second-woocommerce-budget",
     title: "The One-Second WooCommerce Budget",

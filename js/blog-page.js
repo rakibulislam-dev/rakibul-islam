@@ -96,6 +96,60 @@
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.content = post.excerpt;
 
+    /* Per-article SEO: canonical URL, Open Graph + Twitter +
+       Article structured data, so each dispatch is its own
+       indexable, shareable entity. */
+    const SITE = "https://rakibul-dev.pro.bd/";
+    const articleUrl = SITE + "dispatch.html?d=" + encodeURIComponent(post.slug);
+
+    function upsertMeta(selector, attr, value) {
+      let el = document.head.querySelector(selector);
+      if (!el) {
+        el = document.createElement("meta");
+        const m = selector.match(/\[(\w+)="([^"]+)"\]/);
+        if (m) el.setAttribute(m[1], m[2]);
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
+    }
+    upsertMeta('meta[property="og:title"]', "content", post.title);
+    upsertMeta('meta[property="og:description"]', "content", post.excerpt);
+    upsertMeta('meta[property="og:url"]', "content", articleUrl);
+    upsertMeta('meta[name="twitter:title"]', "content", post.title);
+    upsertMeta('meta[name="twitter:description"]', "content", post.excerpt);
+
+    const canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    canonical.href = articleUrl;
+    document.head.appendChild(canonical);
+
+    const ld = document.createElement("script");
+    ld.type = "application/ld+json";
+    ld.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": post.title,
+      "description": post.excerpt,
+      "datePublished": post.date,
+      "dateModified": post.date,
+      "inLanguage": "en",
+      "image": SITE + "assets/img/portrait.jpg",
+      "author": {
+        "@type": "Person",
+        "name": "Rakibul Islam",
+        "alternateName": "rirakeeb",
+        "url": SITE,
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Rakibul Islam",
+        "alternateName": "rirakeeb",
+        "url": SITE,
+      },
+      "mainEntityOfPage": articleUrl,
+    });
+    document.head.appendChild(ld);
+
     /* Header — rendered plain (no data-reveal/data-split): this file
        runs AFTER motion.js's observer has scanned, so late reveal
        attributes would stay stuck at opacity:0 forever. */

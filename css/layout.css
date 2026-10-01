@@ -611,11 +611,11 @@ body.menu-open .nav-toggle span:nth-child(2) { top: 21px; transform: rotate(-45d
 .waypoint__org { color: var(--accent-ink); margin-bottom: 14px; }
 .waypoint__points { display: grid; gap: 7px; color: var(--ink-2); font-size: .95rem; }
 .waypoint__points li { padding-left: 20px; position: relative; }
-.waypoint__points li::before { content: "▸"; position: absolute; left: 0; color: var(--accent-ink); }
-
-/* --- TERRAIN MODE (desktop) -------------------------------- */
+.waypoint__points li::before { content: "▸"; position: absolute; left: 0; color: var(--accent-ink); }  /* --- TERRAIN MODE (desktop) -------------------------------- */
 @media (min-width: 901px) {
-  .route--terrain { height: clamp(1250px, 185vh, 1700px); }
+  /* With staged cards the trail is pure scenery — three waypoints
+     need less scroll room than four did */
+  .route--terrain { height: clamp(1250px, 170vh, 1600px); }
 
   /* Faint contour rings drifting behind the trail */
   .route__scenery { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
@@ -704,42 +704,44 @@ body.menu-open .nav-toggle span:nth-child(2) { top: 21px; transform: rotate(-45d
     box-shadow: 0 0 0 6px var(--accent-soft);
   }
 
-  /* Dashed leader connecting flag ↔ card */
-  .route__stop::before {
-    content: "";
-    position: absolute;
-    left: -1px;
-    width: 2px;
-    height: 22px;
-    border-left: 2px dashed var(--line-strong);
-  }
-  .route__stop:nth-child(odd)::before  { bottom: 9px; }
-  .route__stop:nth-child(even)::before { top: 9px; }
-
-  /* Cards hover above/below their node, alternating */
+  /* ---- STAGED CARDS (scrollytelling) ----
+     Cards no longer float beside their trail anchors (they used to
+     overlap each other, get cropped at the section edges and sit
+     dimmed/desaturated until reached — the "blur" bug). Instead:
+     off-stage cards are parked out of sight, and exactly ONE card
+     is staged at a time — position: fixed, pinned inside the
+     viewport, fully opaque and readable while its waypoint is
+     "travelling". The horizontal nudge (--stage-x, set by JS)
+     keeps the card visually leaning toward its trail flag. */
   .route__stop .waypoint__card {
-    position: absolute;
+    position: fixed;
+    top: 50%;
     left: 50%;
-    width: min(360px, 38vw);
-    transform: translateX(-50%) translateY(10px);
-    opacity: .13;
-    filter: saturate(.35);
-    transition: opacity .5s var(--ease-out), transform .5s var(--ease-out),
-                filter .5s var(--ease-out);
+    width: min(400px, 38vw);
+    max-height: min(76vh, 640px);
+    overflow: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(calc(-50% + var(--stage-x, 0px)), -46%) scale(.985);
+    transition: opacity .28s var(--ease-out),
+                transform .28s var(--ease-out),
+                visibility 0s linear .28s;
+    pointer-events: none;
   }
-  .route__stop:nth-child(odd) .waypoint__card  { bottom: 40px; }
-  .route__stop:nth-child(even) .waypoint__card { top: 40px; }
-
-  /* Trail ends flip inward so edge cards stay inside the section */
-  .route__stop:first-child .waypoint__card { top: 44px; bottom: auto; }
-  .route__stop:first-child::before { top: 9px; bottom: auto; }
-  .route__stop:last-child .waypoint__card { bottom: 44px; top: auto; }
-  .route__stop:last-child::before { bottom: 9px; top: auto; }
-
   .route__stop.is-active .waypoint__card {
     opacity: 1;
-    transform: translateX(-50%);
-    filter: none;
+    visibility: visible;
+    transform: translate(calc(-50% + var(--stage-x, 0px)), -50%) scale(1);
+    pointer-events: auto;
+    transition: opacity .3s var(--ease-out) .1s,
+                transform .3s var(--ease-out) .1s;
+    z-index: 5; /* above trail pin (3), below frame/header (40/70) */
+  }
+
+  /* Reach marker: the flag at the trail point still flips accent
+     color the moment its card is staged */
+  .route__stop.is-active .route__flag {
+    box-shadow: 0 0 0 7px var(--accent-soft);
   }
 }
 

@@ -173,5 +173,18 @@ html.motion-off .waypoint__node { display: block; }
 html.motion-off .route__list { display: grid; gap: clamp(48px, 8vh, 84px); height: auto; }
 html.motion-off .route__stop { position: static; width: auto; }
 
+/* Calm mode: cards flow inline with their waypoint (undo the
+   fixed/hidden staging used by the scrollytelling terrain) */
+html.motion-off .route__stop .waypoint__card {
+  position: static;
+  width: auto;
+  max-height: none;
+  overflow: visible;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+}
+
 /* Calm mode: static shimmer block, no sweep; captures still show */
 html.motion-off .preview.is-loading .preview__viewport::before { animation: none; }

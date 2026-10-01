@@ -248,7 +248,7 @@
   };
 
   console.log(
-    "%c FIELD ATLAS %c OF RAKIBUL ISLAM ",
+    "%c FIELD ATLAS %c OF RAKIBUL ISLAM (RIRAKEEB) ",
     "background:#E8501A;color:#14110C;font-weight:bold;padding:4px 8px;",
     "background:#14110C;color:#EFE9DB;padding:4px 8px;"
   );

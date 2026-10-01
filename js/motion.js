@@ -166,7 +166,7 @@
         return;
       }
       const stops = $$(".route__stop", route);
-      if (!stops.length) return;
+      if (!stops.length) { teardownTerrain(); return; }
 
       const L = svgTrack.getTotalLength();
       svgDraw.style.strokeDasharray = L;
@@ -189,7 +189,7 @@
 
           el.style.left = (clampedX / W * 100) + "%";
           el.style.top = (pt.y / 1500 * 100) + "%";
-          return { el, f };
+          return { el, f, xFrac: pt.x / 1000 };
         }),
       };
     }
@@ -244,9 +244,37 @@
           marker.style.top = (mp.y / 15) + "%";
 
           route.classList.toggle("is-moving", p > 0.004 && p < 0.996);
-          terrain.stops.forEach((o) =>
-            o.el.classList.toggle("is-active", p >= o.f - 0.02)
-          );
+
+          /* Staged cards (scrollytelling): exactly ONE waypoint card
+             is visible at a time, position: fixed inside the
+             viewport — always fully readable, never cropped, never
+             overlapping the next card. The active stop is the last
+             one the travelling pin has reached; its card leans
+             toward its trail flag via --stage-x so the connection
+             stays obvious. This replaces the old "float beside the
+             trail + dim until reached" model that cropped and
+             blurred waypoints 01/02. */
+          let activeIdx = -1;
+          for (let i = 0; i < terrain.stops.length; i++) {
+            if (p >= terrain.stops[i].f - 0.015) activeIdx = i;
+            else break;
+          }
+          /* Trail complete: release the staged card once the route
+             section is scrolling out of view, so it ends cleanly
+             instead of pinning the last card toward the page bottom */
+          if (r.bottom <= vh * 0.62) activeIdx = -1;
+          terrain.stops.forEach((o, i) => {
+            const isActive = i === activeIdx;
+            o.el.classList.toggle("is-active", isActive);
+            if (isActive) {
+              const card = o.el.querySelector(".waypoint__card");
+              if (card) {
+                const W = route.clientWidth || innerWidth;
+                const lean = Math.min(Math.max((o.xFrac - 0.5) * W * 0.34, -110), 110);
+                card.style.setProperty("--stage-x", lean.toFixed(1) + "px");
+              }
+            }
+          });
         } else if (!reduced) {
           // --- Rail mode (mobile / fallback) ---
           const r = route.getBoundingClientRect();
@@ -294,6 +322,13 @@
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { setupTerrain(); update(); }).catch(() => {});
     }
+
+    /* Re-measure once every resource (images, fonts, late layout)
+       has settled — the boot overlay and lazy layout shifts can
+       leave the first measurement stale, which showed up as
+       waypoints 01/02 flaring at the wrong scroll positions. */
+    addEventListener("load", () => { setupTerrain(); update(); }, { once: true });
+    document.addEventListener("site:ready", () => { setupTerrain(); update(); });
 
     setupTerrain();
     update();
